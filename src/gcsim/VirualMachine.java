@@ -1,19 +1,35 @@
 package gcsim;
 
-import gcsim.Objtypes.Reference;
+import java.util.ArrayList;
+import gcsim.Objtype.Reference;
 
 public class VirualMachine {
 	
 	final int memory = 134_217_728;	// this is 1 Gigabyte of memory divided into 8 byte words
-	Stack stack = new Stack();
-	Heap heap = new Heap(memory, null);
+	int generations;
+	ArrayList<Reference> stack = new ArrayList<>();
+	MemManager heap;
 	
+	public VirualMachine(int _generations, int ... _ages) {
+		heap = new MemManager(_generations, _ages);
+	}
 	
-	static void makeAnObject(int size, int lifetime) {
+	void allocate(Objtype o) {
+		// check if memory manager can allocate a new object
+		if (heap.hasSpace(o.contents.size())) {
+			
+		} else {
+			
+		}
 		// create a brand new reference
-		Reference x = new Reference(size, lifetime);
 		// allocate new memory from the heap, get the address, pass it back to the reference
 		
 	}
-
+	
+	void collectgarbage() {}
+	
+	void trace() {
+		
+	}
+	
 }
