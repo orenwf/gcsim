@@ -1,5 +1,0 @@
-package gcsim;
-
-class MemManager {
-	
-}
