@@ -2,7 +2,6 @@ package gcsim;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import gcsim.Objtype.Reference;
 import gcsim.Objtype.Word;
 
 public class MemManager {

@@ -1,7 +1,6 @@
 package gcsim;
 
 import java.util.ArrayList;
-import gcsim.Objtype.Reference;
 
 public class VirualMachine {
 	
