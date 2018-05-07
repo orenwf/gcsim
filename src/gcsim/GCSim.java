@@ -1,6 +1,5 @@
 package gcsim;
 
-import java.time.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,5 +19,6 @@ public class GCSim {
 		for (int i = 0; i < p.size(); i++) {
 			System.out.println("Please enter a whole number percentage of remaining run time for ");
 		}
+		in.close();
 	}
 }
