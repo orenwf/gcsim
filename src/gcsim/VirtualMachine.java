@@ -9,46 +9,85 @@ import java.util.stream.Collectors;
 
 public class VirtualMachine {
 	
-	final Integer memory = 134_217_728;	// this is 1 Gigabyte of memory divided into 8 byte words
+	static final Integer memory = 134_217_728;	// this is 1 Gigabyte of memory divided into 8 byte words
 	private Stack<Reference> stack;		// the stack machine
-	@SuppressWarnings("unused")
-	private List<Object_T> scope;		// for selecting references
-	private Heap heap;
+	private Heap gen0, gen1, gen2;
 	
-	public static VirtualMachine init(List<Integer> sizes) {
+	public static VirtualMachine init(List<Integer> proportions) {
+		List<Integer> sizes = proportions.stream().map(x -> x * memory / 100)
+												.collect(Collectors.toList());
 		return new VirtualMachine(sizes);
 	}
-	
+
 	private VirtualMachine(List<Integer> _sizes) {
-		heap = Heap.init(memory, _sizes.stream().limit(3).collect(Collectors.toList()));
+		gen0 = Eden.init(_sizes.get(0));
+		gen1 = Survivor.init(_sizes.get(1));
+		gen2 = Mature.init(_sizes.get(2));
 		stack = new Stack<Reference>();
 	}
 	
 	public Reference allocate(Object_T o) throws InvalidObjectException {
-		try { return heap.newalloc(o);
+		try { return gen0.memalloc(o);
 		} catch (OutOfMemoryException oom) {
-			oom.printStackTrace();
 			invokeGC(oom.generation());
 			return allocate(o);
 		}
 	}
-	
-	private void invokeGC(Integer gen) {
-		List<Reference> graph = new LinkedList<>();
-		for (Reference i : stack) {
-			graph = trace(gen, i);
-			graph = graph.stream().distinct()
-					.filter(s -> heap.in(gen, s))
-					.collect(Collectors.toList());
-		}
-		if (gen < 2) heap.promote(gen, graph);
-		else heap.sweep(gen);
+
+	private void pause() {
+		
 	}
 	
-	private List<Reference> trace(Integer gen, Reference root) {
-		List<Reference> l = new LinkedList<Reference>();
-		//TODO : finish tracing algorithm
-		return l;
+	private void resume() {
+		
+	}
+
+	
+	private void invokeGC(Heap gen) throws InvalidObjectException {
+		pause();
+		if (gen == gen0) try {
+			List<Heap> l = new LinkedList<Heap>();
+			l.add(gen0);
+			trace(l);
+			gen.GC(gen1); 
+		} catch (OutOfMemoryException oom) {
+			invokeGC(oom.generation());
+		}
+		else if (gen == gen1) try { 
+			List<Heap> l = new LinkedList<>();
+			l.add(gen0);
+			l.add(gen1);
+			trace(l);
+			gen.GC(gen2);
+		} catch (OutOfMemoryException oom) {
+			invokeGC(oom.generation());
+		}
+		else if (gen == gen2) try { 
+			List<Heap> l = new LinkedList<>();
+			l.add(gen0);
+			l.add(gen1);
+			l.add(gen2);
+			gen.GC(gen2);
+		} catch (OutOfMemoryException oom) {
+			invokeGC(oom.generation());
+		}
+		resume();
+	}
+	
+	private void trace(List<Heap> gens) {
+		for (Reference i : stack) {
+			mark(i, gens);
+		}
+	}
+		
+	private void mark(Reference root, List<Heap> gens) {
+		for (Heap gen : gens) 
+			if (root.in(gen)) {
+				root.deref().mark();
+				List<Reference> g = root.deref().refs().stream()
+								.collect(Collectors.toList());
+				for (Reference r : g) mark(r, gens);
+				}
 	}
 	
 }

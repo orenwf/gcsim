@@ -2,27 +2,22 @@ package gcsim;
 
 public class Reference {
 	
-	private Integer address;
-	private Integer words;
+	private Object_T address;
 	
-	public static Reference init(Integer address, Integer words) { 
-		return new Reference(address, words); 
+	public static Reference init(Object_T address) { 
+		return new Reference(address); 
 	}
 	
 	public static Reference copy(Reference r) { 
-		return new Reference(r.address, r.words); 
+		return new Reference(r.address); 
 	}
 
-	public Reference(Integer _address, Integer _words) { 
+	public Reference(Object_T _address) { 
 		address = _address;
-		words = _words;
 	}
 		
-	public Integer address() { return address; }
+	public Object_T deref() { return address; }
 	
-	public Integer size() { return words; }
+	public boolean in(Heap x) { return x.addrSpace().contains(address); }
 	
-	public void setAddress(Integer _address) { address = _address; }
-	
-	public void resize(Integer newSize) { words = newSize; }
 }

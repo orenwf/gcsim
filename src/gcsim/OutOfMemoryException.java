@@ -6,11 +6,11 @@ public class OutOfMemoryException extends Exception {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer generation;
+	private Heap generation;
 	
-	public OutOfMemoryException(Integer _generation) {
-		generation = _generation;
+	public OutOfMemoryException(Heap gen) {
+		generation = gen;
 	}
 
-	public Integer generation() { return generation; }
+	public Heap generation() { return generation; }
 }
