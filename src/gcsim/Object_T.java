@@ -1,6 +1,9 @@
 package gcsim;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Object_T {
 	
@@ -17,6 +20,14 @@ public class Object_T {
 	
 	public static Object_T makeEmpty(Integer size) {
 		Object_T o = new Object_T(size);
+		return o;
+	}
+	
+	public static Object_T generate(HashMap<String, Object> seed, HashSet<Reference> stack) {
+		// TODO: implementation of HashMap Doubles / Times / Ints
+		Object_T o = new Object_T(((Double)seed.get("size")).intValue());
+		Integer refs = ((Double)Math.log(((Double)seed.get("size")))).intValue();
+		o.refs = stack.stream().distinct().limit(refs).collect(Collectors.toList());
 		return o;
 	}
 	

@@ -1,9 +1,18 @@
 package gcsim;
 
 import java.util.*;
-import java.util.ArrayList;
 
 class Simulator {
 	
+	private Simulator() {
+	}
+	
+	public static Simulator init() {
+		return new Simulator();
+	}
+	
+	public Stack<HashMap<String, Object>> generate() {
+		return null;
+	}
 
 }

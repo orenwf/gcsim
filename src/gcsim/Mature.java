@@ -35,8 +35,9 @@ public class Mature implements Heap {
 	
 
 	@Override
-	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException {
-		sweepCompact();
+	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
+		GCSim.log("Commence garbage collection in "+this.toString()+".");
+		GCSim.log("Garbage collection in "+this.toString()+" complete, reclaiming "+sweepCompact()+" words.");
 	}
 	
 	private void memcopy(Object_T obj) throws OutOfMemoryException, InvalidObjectException {
@@ -49,14 +50,18 @@ public class Mature implements Heap {
 		throw new OutOfMemoryException(this);
 	}
 	
-	private void sweepCompact() {
+	private Integer sweepCompact() throws InterruptedException {
 		Integer reclaimed = 0;
 		for (Object_T i : addrSpace) {
-			if (!i.marked()) {
+			Thread.sleep(10);
+			if (addrSpace.indexOf(i) == 0) ;
+			else if (!i.marked()) {
 				reclaimed += i.size();
 				addrSpace.remove(i);
 			}
+			i.incAge();
 		}
-		addrSpace.add(Object_T.makeEmpty(reclaimed));
+		addrSpace.set(0, Object_T.makeEmpty(reclaimed));
+		return reclaimed;
 	}
 }

@@ -17,7 +17,8 @@ public class GCSim {
 		logger.log(Level.INFO, Instant.now().toString()+" - "+msg);
 	}
 		
-	public static void main(String ... args) throws IOException {
+	public static void main(String ... args) 
+			throws IOException, InvalidObjectException, InterruptedException {
 		
 		final Scanner in = new Scanner(System.in);
 		ArrayList<Integer> sizes = new ArrayList<>();
@@ -30,11 +31,9 @@ public class GCSim {
 			log("Gen"+i+" = "+g+".");
 		}
 		
-		Simulator sim;
-		VirtualMachine vm = VirtualMachine.init(sizes);
-		vm.start();
-		
-		
+		Simulator rv = Simulator.init();
+		VirtualMachine vm = VirtualMachine.init(sizes, rv.generate());
+		vm.start();		
 		in.close();
 	}
 }

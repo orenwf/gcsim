@@ -44,10 +44,12 @@ public class Survivor implements Heap {
 	}
 
 	@Override
-	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException {
-		stopAndCopy(working(), target);
+	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
+		GCSim.log("Commence garbage collection in "+this.toString()+".");
+		Integer m = stopAndCopy(working(), target);
 		swap();
 		sweep();
+		GCSim.log("Garbage collection in "+this.toString()+" complete, freed "+m+" words.");
 	}
 	
 	private List<Object_T> working() { return current; }
@@ -56,17 +58,21 @@ public class Survivor implements Heap {
 	
 	private void swap() { if (current == a) current = b; else current = a; }
 	
-	private void stopAndCopy(List<Object_T> working, Heap target) 
-			throws OutOfMemoryException, InvalidObjectException {
+	private Integer stopAndCopy(List<Object_T> working, Heap target) 
+			throws OutOfMemoryException, InvalidObjectException, InterruptedException {
 		LinkedList<Object_T> agedOut = new LinkedList<>();
+		Integer t = 0;
 		for (Object_T i : working) {
-			if (i.marked()) {
+			Thread.sleep(10);
+			if (working.indexOf(i) == 0) ;
+			else if (i.marked()) {
 				if (i.getAge() > AGELIMIT) agedOut.add(i);
 				else memcopy(i, clean());
 				i.incAge();
-			}
+			} else t += i.size();
 		}
 		promote(agedOut, target);
+		return t;
 	}
 	
 	private void memcopy(Object_T obj, List<Object_T> target) 

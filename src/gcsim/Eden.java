@@ -39,18 +39,25 @@ public class Eden implements Heap {
 	public List<Object_T> addrSpace() { return addrSpace; }
 	
 	@Override
-	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException {
-		promote(target);
+	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
+		GCSim.log("Commence garbage collection in "+this.toString()+".");
+		Integer m = promote(target);
 		sweep();
+		GCSim.log("Garbage collection in "+this.toString()+" complete, freed "+m+" words.");
 	}
 
-	private void promote(Heap target) throws OutOfMemoryException, InvalidObjectException {
+	private Integer promote(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
+		Integer t = 0;
 		for (Object_T i : addrSpace) {
-			if (i.marked()) {
+			Thread.sleep(10);
+			if (addrSpace.indexOf(i) == 0) ;
+			else if (i.marked()) {
 				i.incAge();
+				t += i.size();
 				target.allocate(i);
-			}
+			} else t += i.size();
 		}
+		return t;
 	}
 	
 	private void sweep() {

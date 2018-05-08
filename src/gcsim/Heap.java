@@ -8,6 +8,6 @@ public interface Heap {
 	
 	Reference allocate(Object_T o) throws OutOfMemoryException, InvalidObjectException;
 
-	void GC(Heap target) throws OutOfMemoryException, InvalidObjectException;
+	void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException;
 
 }
