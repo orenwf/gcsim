@@ -27,7 +27,7 @@ public class Eden implements Heap {
 				i.resize(obj.size());
 				return Reference.init(obj);
 			}
-		} 
+		}
 		throw new OutOfMemoryException(this);
 	}
 
@@ -41,7 +41,9 @@ public class Eden implements Heap {
 	}
 
 	private void promote(Heap target) throws OutOfMemoryException, InvalidObjectException {
-		for (Object_T i : addrSpace) target.memalloc(i);
+		for (Object_T i : addrSpace) {
+			if (i.marked()) target.memalloc(i);
+		}
 	}
 	
 	private void sweep() {

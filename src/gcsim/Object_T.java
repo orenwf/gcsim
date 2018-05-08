@@ -45,7 +45,7 @@ public class Object_T {
 	
 	public void incAge() { age++; }
 	
-	public boolean empty() { return size == 0; }
+	public boolean empty() { return empty; }
 	
 	public List<Reference> refs() { return refs; }
 	

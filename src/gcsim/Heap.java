@@ -10,5 +10,4 @@ public interface Heap {
 
 	void GC(Heap target) throws OutOfMemoryException, InvalidObjectException;
 
-
 }

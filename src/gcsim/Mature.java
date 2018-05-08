@@ -31,20 +31,20 @@ public class Mature implements Heap {
 	}
 	
 	private void sweep() {
-		int from = generation.get(gen).get("min");
-		int to = generation.get(gen).get("max");
-		List<Reference> newlist = new LinkedList<Reference>();
-		Reference nfr = Reference.init(from, 0);
-		for (int current = from; current < to; current++) {
-			if (!addressSpace.get(current).marked()) {
-				addressSpace.remove(current);
-				nfr.resize(nfr.size()+1);
-			} else {
-				newlist.add(nfr);
-				nfr = Reference.init(current, 0);
-			}
-		}
-		freelist.set(gen, newlist);
+//		int from = generation.get(gen).get("min");
+//		int to = generation.get(gen).get("max");
+//		List<Reference> newlist = new LinkedList<Reference>();
+//		Reference nfr = Reference.init(from, 0);
+//		for (int current = from; current < to; current++) {
+//			if (!addressSpace.get(current).marked()) {
+//				addressSpace.remove(current);
+//				nfr.resize(nfr.size()+1);
+//			} else {
+//				newlist.add(nfr);
+//				nfr = Reference.init(current, 0);
+//			}
+//		}
+//		freelist.set(gen, newlist);
 	}
 
 	@Override
