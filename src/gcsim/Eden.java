@@ -1,8 +1,8 @@
 package gcsim;
 
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Eden implements Heap {
 	
@@ -16,16 +16,21 @@ public class Eden implements Heap {
 	}
 	
 	public static Eden init(Integer size) {
-		return new Eden(size);
+		Eden n = new Eden(size);
+		GCSim.log("Eden generation intialized.");
+		return n;
 	}
 
 	@Override
 	public Reference memalloc(Object_T obj) throws OutOfMemoryException, InvalidObjectException {
 		for (Object_T i : addrSpace ) {
 			if (i.size() >= obj.size() && i.empty()) {
-				addrSpace.add(addrSpace.indexOf(i), obj);
+				addrSpace.add(addrSpace.indexOf(i)+1, obj);
 				i.resize(obj.size());
-				return Reference.init(obj);
+				Reference r = Reference.init(obj);
+				GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
+						+obj.toString()+" located on "+this.toString()+".");
+				return r;
 			}
 		}
 		throw new OutOfMemoryException(this);
@@ -42,7 +47,10 @@ public class Eden implements Heap {
 
 	private void promote(Heap target) throws OutOfMemoryException, InvalidObjectException {
 		for (Object_T i : addrSpace) {
-			if (i.marked()) target.memalloc(i);
+			if (!i.empty() && i.marked()) {
+				i.incAge();
+				target.memalloc(i);
+			}
 		}
 	}
 	

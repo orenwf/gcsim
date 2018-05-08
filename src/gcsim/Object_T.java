@@ -4,8 +4,7 @@ import java.util.List;
 
 public class Object_T {
 	
-	private List<Reference> refs;		// out
-	private List<Reference> pointers;	// in
+	private List<Reference> refs;
 	private Integer size;
 	private boolean empty;
 	private boolean marked;
@@ -13,7 +12,8 @@ public class Object_T {
 
 	
 	public static Object_T ofSize(Integer size) {
-		return new Object_T(size);
+		Object_T o = new Object_T(size);
+		return o;
 	}
 	
 	public static Object_T makeEmpty(Integer size) {
@@ -48,7 +48,5 @@ public class Object_T {
 	public boolean empty() { return empty; }
 	
 	public List<Reference> refs() { return refs; }
-	
-	public List<Reference> pointers() { return pointers; }
-	
+		
 }

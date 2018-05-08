@@ -5,11 +5,15 @@ public class Reference {
 	private Object_T address;
 	
 	public static Reference init(Object_T address) { 
-		return new Reference(address); 
+		Reference r = new Reference(address);
+		GCSim.log(r.toString()+" initialized, pointing to object: "+r.deref().toString()+".");
+		return r;
 	}
 	
 	public static Reference copy(Reference r) { 
-		return new Reference(r.address); 
+		Reference c = new Reference(r.address);
+		GCSim.log(r.toString()+" copied as "+c.toString()+", pointing to object "+c.deref().toString()+".");
+		return c;
 	}
 
 	public Reference(Object_T _address) { 

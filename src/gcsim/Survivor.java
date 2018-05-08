@@ -3,8 +3,9 @@ package gcsim;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Survivor implements Heap{
+public class Survivor implements Heap {
 	
+	private static Integer AGELIMIT = 2;
 	private Integer aSize, bSize;
 	private List<Object_T> a;
 	private List<Object_T> b;
@@ -27,8 +28,11 @@ public class Survivor implements Heap{
 	
 	@Override
 	public Reference memalloc(Object_T obj) throws InvalidObjectException, OutOfMemoryException {
-		// TODO Auto-generated method stub
-		return null;
+		memcopy(obj, working());
+		Reference r = Reference.init(obj);
+		GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
+				+obj.toString()+" located on "+this.toString()+".");
+		return r;
 	}
 
 	@Override
@@ -41,21 +45,52 @@ public class Survivor implements Heap{
 
 	@Override
 	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException {
-		stopAndCopy(swap());
+		stopAndCopy(working(), target);
+		swap();
+		sweep();
 	}
 	
-	private List<Object_T> swap() {
-		if (current == a) current = b; 
-		else current = a;
-		return current;
+	private List<Object_T> working() { return current; }
+	
+	private List<Object_T> clean() { if (current == a) return b; else return a; }
+	
+	private void swap() { if (current == a) current = b; else current = a; }
+	
+	private void stopAndCopy(List<Object_T> working, Heap target) 
+			throws OutOfMemoryException, InvalidObjectException {
+		LinkedList<Object_T> agedOut = new LinkedList<>();
+		for (Object_T i : working) {
+			if (!i.empty() && i.marked()) {
+				if (i.getAge() > AGELIMIT) agedOut.add(i);
+				else memcopy(i, clean());
+				i.incAge();
+			}
+		}
+		promote(agedOut, target);
 	}
 	
-	private void stopAndCopy(List<Object_T> target) throws OutOfMemoryException, InvalidObjectException {
-		
+	private void memcopy(Object_T obj, List<Object_T> target) 
+			throws OutOfMemoryException, InvalidObjectException {
+		for (Object_T i : target ) {
+			if (i.size() >= obj.size() && i.empty()) {
+				current.add(current.indexOf(i)+1, obj);
+				i.resize(obj.size());
+				return;
+			}
+		}
+		throw new OutOfMemoryException(this);
 	}
 	
-	private void promote(Heap target) throws OutOfMemoryException, InvalidObjectException {
-		
+	private void promote(List<Object_T> toPromote, Heap target) 
+			throws OutOfMemoryException, InvalidObjectException {
+		for (Object_T i : toPromote) target.memalloc(i);
+	}
+	
+	private void sweep() {
+		Integer size;
+		if (clean() == a) size = aSize; else size = bSize;
+		LinkedList<Object_T> clean = new LinkedList<Object_T>();
+		clean.add(Object_T.makeEmpty(size));
 	}
 	
 }
