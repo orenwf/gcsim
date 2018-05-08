@@ -22,16 +22,15 @@ public class Eden implements Heap {
 	}
 
 	@Override
-	public Reference memalloc(Object_T obj) throws OutOfMemoryException, InvalidObjectException {
-		for (Object_T i : addrSpace ) {
-			if (i.size() >= obj.size() && i.empty()) {
-				addrSpace.add(addrSpace.indexOf(i)+1, obj);
-				i.resize(obj.size());
-				Reference r = Reference.init(obj);
-				GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
-						+obj.toString()+" located on "+this.toString()+".");
-				return r;
-			}
+	public Reference allocate(Object_T obj) throws OutOfMemoryException, InvalidObjectException {
+		Object_T free = addrSpace.get(0);
+		if (free.size() >= obj.size()) {
+			addrSpace.add(addrSpace.indexOf(free)+1, obj);
+			free.resize(obj.size());
+			Reference r = Reference.init(obj);
+			GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
+					+obj.toString()+" located on "+this.toString()+".");
+			return r;
 		}
 		throw new OutOfMemoryException(this);
 	}
@@ -47,9 +46,9 @@ public class Eden implements Heap {
 
 	private void promote(Heap target) throws OutOfMemoryException, InvalidObjectException {
 		for (Object_T i : addrSpace) {
-			if (!i.empty() && i.marked()) {
+			if (i.marked()) {
 				i.incAge();
-				target.memalloc(i);
+				target.allocate(i);
 			}
 		}
 	}

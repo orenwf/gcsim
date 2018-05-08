@@ -22,12 +22,12 @@ public class Survivor implements Heap {
 		bSize = size/2;
 		a = new LinkedList<>();
 		b = new LinkedList<>();
-		a.add(Object_T.ofSize(aSize));
-		b.add(Object_T.ofSize(bSize));
+		a.add(Object_T.makeEmpty(aSize));
+		b.add(Object_T.makeEmpty(bSize));
 	}
 	
 	@Override
-	public Reference memalloc(Object_T obj) throws InvalidObjectException, OutOfMemoryException {
+	public Reference allocate(Object_T obj) throws InvalidObjectException, OutOfMemoryException {
 		memcopy(obj, working());
 		Reference r = Reference.init(obj);
 		GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
@@ -60,7 +60,7 @@ public class Survivor implements Heap {
 			throws OutOfMemoryException, InvalidObjectException {
 		LinkedList<Object_T> agedOut = new LinkedList<>();
 		for (Object_T i : working) {
-			if (!i.empty() && i.marked()) {
+			if (i.marked()) {
 				if (i.getAge() > AGELIMIT) agedOut.add(i);
 				else memcopy(i, clean());
 				i.incAge();
@@ -71,19 +71,18 @@ public class Survivor implements Heap {
 	
 	private void memcopy(Object_T obj, List<Object_T> target) 
 			throws OutOfMemoryException, InvalidObjectException {
-		for (Object_T i : target ) {
-			if (i.size() >= obj.size() && i.empty()) {
-				current.add(current.indexOf(i)+1, obj);
-				i.resize(obj.size());
-				return;
-			}
+		Object_T free = working().get(0);
+		if (free.size() >= obj.size()) {
+			current.add(current.indexOf(free)+1, obj);
+			free.resize(obj.size());
+			return;
 		}
 		throw new OutOfMemoryException(this);
 	}
 	
 	private void promote(List<Object_T> toPromote, Heap target) 
 			throws OutOfMemoryException, InvalidObjectException {
-		for (Object_T i : toPromote) target.memalloc(i);
+		for (Object_T i : toPromote) target.allocate(i);
 	}
 	
 	private void sweep() {

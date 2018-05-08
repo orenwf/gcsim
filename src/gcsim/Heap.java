@@ -6,7 +6,7 @@ public interface Heap {
 
 	List<Object_T> addrSpace();
 	
-	Reference memalloc(Object_T o) throws OutOfMemoryException, InvalidObjectException;
+	Reference allocate(Object_T o) throws OutOfMemoryException, InvalidObjectException;
 
 	void GC(Heap target) throws OutOfMemoryException, InvalidObjectException;
 

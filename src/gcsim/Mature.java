@@ -16,13 +16,16 @@ public class Mature implements Heap {
 	private Mature(Integer _size) {
 		capacity = _size;
 		addrSpace = new LinkedList<>();
-		addrSpace.add(Object_T.ofSize(capacity));
+		addrSpace.add(Object_T.makeEmpty(capacity));
 	}
 	
 	@Override
-	public Reference memalloc(Object_T obj) throws InvalidObjectException, OutOfMemoryException {
-		// TODO Auto-generated method stub
-		return null;
+	public Reference allocate(Object_T obj) throws InvalidObjectException, OutOfMemoryException {
+		memcopy(obj);
+		Reference r = Reference.init(obj);
+		GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
+				+obj.toString()+" located on "+this.toString()+".");
+		return r;
 	}
 
 	@Override
@@ -30,24 +33,30 @@ public class Mature implements Heap {
 		return addrSpace.stream().collect(Collectors.toList());
 	}
 	
-	private void sweep() {
-//		int from = generation.get(gen).get("min");
-//		int to = generation.get(gen).get("max");
-//		List<Reference> newlist = new LinkedList<Reference>();
-//		Reference nfr = Reference.init(from, 0);
-//		for (int current = from; current < to; current++) {
-//			if (!addressSpace.get(current).marked()) {
-//				addressSpace.remove(current);
-//				nfr.resize(nfr.size()+1);
-//			} else {
-//				newlist.add(nfr);
-//				nfr = Reference.init(current, 0);
-//			}
-//		}
-//		freelist.set(gen, newlist);
-	}
 
 	@Override
-	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException {	}
-
+	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException {
+		sweepCompact();
+	}
+	
+	private void memcopy(Object_T obj) throws OutOfMemoryException, InvalidObjectException {
+		Object_T free = addrSpace.get(0);
+		if (free.size() >= obj.size()) {
+			addrSpace.add(addrSpace.indexOf(free)+1, obj);
+			free.resize(obj.size());
+			return;
+		}
+		throw new OutOfMemoryException(this);
+	}
+	
+	private void sweepCompact() {
+		Integer reclaimed = 0;
+		for (Object_T i : addrSpace) {
+			if (!i.marked()) {
+				reclaimed += i.size();
+				addrSpace.remove(i);
+			}
+		}
+		addrSpace.add(Object_T.makeEmpty(reclaimed));
+	}
 }

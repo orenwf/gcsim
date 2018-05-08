@@ -50,7 +50,7 @@ public class VirtualMachine {
 	}
 
 	public Reference allocate(Object_T o) throws InvalidObjectException {
-		try { return gen0.memalloc(o);
+		try { return gen0.allocate(o);
 		} catch (OutOfMemoryException oom) {
 			GCSim.log(oom.generation().toString()+" out of memory at "+oom.time()+".");
 			invokeGC(oom.generation());

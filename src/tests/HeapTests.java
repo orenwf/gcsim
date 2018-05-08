@@ -13,7 +13,7 @@ public class HeapTests {
 		while (true) {
 			Object_T obj = Object_T.ofSize(100);
 			try { 
-				x.memalloc(obj);
+				x.allocate(obj);
 			} catch (OutOfMemoryException | InvalidObjectException exc) {
 			System.out.println(exc.getMessage());
 			break;
