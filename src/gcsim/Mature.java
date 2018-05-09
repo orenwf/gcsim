@@ -53,7 +53,7 @@ public class Mature implements Heap {
 	private Integer sweepCompact() throws InterruptedException {
 		Integer reclaimed = 0;
 		for (Object_T i : addrSpace) {
-			Thread.sleep(10);
+			Thread.sleep(VirtualMachine.work*VirtualMachine.sweepFactor);
 			if (addrSpace.indexOf(i) == 0) ;
 			else if (!i.marked()) {
 				reclaimed += i.size();

@@ -49,7 +49,7 @@ public class Eden implements Heap {
 	private Integer promote(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
 		Integer t = 0;
 		for (Object_T i : addrSpace) {
-			Thread.sleep(10);
+			Thread.sleep(VirtualMachine.work*VirtualMachine.sweepFactor);
 			if (addrSpace.indexOf(i) == 0) ;
 			else if (i.marked()) {
 				i.incAge();

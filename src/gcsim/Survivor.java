@@ -63,7 +63,7 @@ public class Survivor implements Heap {
 		LinkedList<Object_T> agedOut = new LinkedList<>();
 		Integer t = 0;
 		for (Object_T i : working) {
-			Thread.sleep(10);
+			Thread.sleep(VirtualMachine.work*VirtualMachine.sweepFactor);
 			if (working.indexOf(i) == 0) ;
 			else if (i.marked()) {
 				if (i.getAge() > AGELIMIT) agedOut.add(i);

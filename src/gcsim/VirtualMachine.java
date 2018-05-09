@@ -7,12 +7,13 @@ import java.time.*;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-// TODO: Implement clocks, arrivals, lifetimes
-
 public class VirtualMachine {
-	
-	private static final Integer memory = 134_217_728;	// this is 1 Gigabyte of memory divided into 8 byte words
-	private HashMap<Instant, Reference> stack;		// the thread / stack reference pool
+
+	public static final Integer work = 5;
+	public static final Integer markFactor = 1;
+	public static final Integer sweepFactor = 2;
+	private static final Integer memory = 134_217_728;	// this is 1 GB divided into 8 byte words
+	private HashMap<Instant, Reference> stack;			// the thread-or-stack reference pool
 	private Heap gen0, gen1, gen2;
 	private HashMap<Class<?>, Object> randVarTable;
 	private boolean running = true;
@@ -40,7 +41,7 @@ public class VirtualMachine {
 			while (!paused) {
 				@SuppressWarnings("unchecked")
 				Instant arrival = ((Stack<Instant>) randVarTable.get(Instant.class)).pop();
-				while (waitingArrival(arrival)) /* spin-lock*/ ;
+/*spin-lock*/	while (waitingArrival(arrival)) /* spin-lock*/ ;
 				@SuppressWarnings("unchecked")
 				Integer size = ((Stack<Integer>)randVarTable.get(Integer.class)).pop();
 				@SuppressWarnings("unchecked")
@@ -137,7 +138,7 @@ public class VirtualMachine {
 		
 	private void mark(Reference ref, List<Heap> gens) throws InterruptedException {
 		for (Heap gen : gens) {
-			Thread.sleep(5);
+			Thread.sleep(work*markFactor);
 			if (ref.in(gen)) {
 				ref.deref().mark();
 				List<Reference> g = ref.deref().refs().stream()
