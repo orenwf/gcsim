@@ -30,8 +30,11 @@ public class GCSim {
 			if (i == 2 && j > 0) sizes.set(i, sizes.get(i)+j);
 			log("Gen"+i+" = "+g+".");
 		}
+		System.out.println("Please enter the number of objects to be simulated.");
+		Integer x = in.nextInt();
+		log("Simulating "+x+"objects.");
 		
-		Simulator rv = Simulator.init();
+		Simulator rv = Simulator.init(x);
 		VirtualMachine vm = VirtualMachine.init(sizes, rv.generate());
 		vm.start();		
 		in.close();
