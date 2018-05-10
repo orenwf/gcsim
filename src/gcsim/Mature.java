@@ -10,7 +10,9 @@ public class Mature implements Heap {
 	Integer capacity;
 	
 	public static Mature init(Integer size) {
-		return new Mature(size);
+		Mature x = new Mature(size);
+		GCSim.log("Mature generation of size "+size+" intialized.");
+		return x;
 	}
 
 	private Mature(Integer _size) {

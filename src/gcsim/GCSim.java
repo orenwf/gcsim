@@ -14,7 +14,7 @@ public class GCSim {
 	
 	public static void log(String msg) {
 		Logger logger = Logger.getLogger(logName);
-		logger.log(Level.INFO, Instant.now().toString()+" - "+msg);
+		logger.log(Level.INFO, " - "+msg);
 	}
 		
 	public static void main(String ... args) 
@@ -34,8 +34,8 @@ public class GCSim {
 		Integer x = in.nextInt();
 		log("Simulating "+x+"objects.");
 		
-		Simulator rv = Simulator.init(x);
-		VirtualMachine vm = VirtualMachine.init(sizes, rv.generate());
+		Simulator myRandomVarGenerator = Simulator.init(x);
+		VirtualMachine vm = VirtualMachine.init(sizes, myRandomVarGenerator.generate());
 		vm.start();		
 		in.close();
 	}

@@ -1,17 +1,19 @@
 package gcsim;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
-import java.util.Stack;
 
 class Simulator {
 	
-	private Random r;
+	private Random myRandomObject;
 	private Integer count;
 	
 	private Simulator(Random _r) {
-		r = _r;
+		myRandomObject = _r;
 	}
 	
 	public static Simulator init(Integer count) {
@@ -20,17 +22,24 @@ class Simulator {
 	}
 	
 	public HashMap<Class<?>, Object> generate() {
+		
 		HashMap<Class<?>, Object> randVarTable = new HashMap<>();
-		Instant offset = Instant.now().plusSeconds(30);
-		Stack<Instant> arrivals = new Stack<>();
-		r.longs(count, 0, 10000).boxed().map(x -> offset.plusMillis(x)).sorted().forEach(x -> arrivals.push(x));
-		Stack<Long> sizes = new Stack<>();
-		r.longs(count, 0, 1000).boxed().sorted().forEach(x -> sizes.push(x));
-		Stack<Long> lifetimes = new Stack<>();
-		r.longs(count, 0, 10000).boxed().sorted().forEach(x -> lifetimes.push(x));
+				
+		Queue<Long> arrivals = new LinkedList<>();
+		myRandomObject.longs(count, 0, 10000).distinct().boxed().sorted()
+								.forEach(x -> arrivals.add(x));
+		
+		Queue<Integer> sizes = new LinkedList<>();
+		myRandomObject.ints(count, 1, 1000).boxed()
+								.forEach(x -> sizes.add(x));
+		
+		Queue<Duration> lifetimes = new LinkedList<>();
+		myRandomObject.longs(count, 0, 10000).distinct().boxed()
+								.forEach(x -> lifetimes.add(Duration.ofMillis(x)));
+		
 		randVarTable.put(Integer.class, sizes);
 		randVarTable.put(Instant.class, arrivals);
-		randVarTable.put(Long.class, lifetimes);
+		randVarTable.put(Duration.class, lifetimes);
 		return randVarTable;
 	}
 }

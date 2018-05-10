@@ -17,7 +17,7 @@ public class Eden implements Heap {
 	
 	public static Eden init(Integer size) {
 		Eden n = new Eden(size);
-		GCSim.log("Eden generation intialized.");
+		GCSim.log("Eden generation of size "+size+" intialized.");
 		return n;
 	}
 

@@ -14,6 +14,7 @@ public class Survivor implements Heap {
 	public static Survivor init(Integer size) {
 		Survivor s = new Survivor(size);
 		s.current = s.a;
+		GCSim.log("Survivor generation of size "+size+" intialized.");
 		return s;
 	}
 	
