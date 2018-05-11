@@ -35,6 +35,9 @@ public class Mature implements Heap {
 		return addrSpace.stream().collect(Collectors.toList());
 	}
 	
+	@Override
+	public Long size() { return capacity - addrSpace.get(0).size(); }
+	
 
 	@Override
 	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {

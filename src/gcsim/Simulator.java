@@ -28,19 +28,19 @@ class Simulator {
 				
 		Queue<Long> arrivals = new LinkedList<>();
 		arrivals.addAll(Stream.generate(myRandomObject::nextLong)
-				.map(x -> Math.abs(x)%1000+1)
+				.map(x -> Math.abs(x)%500+10)
 				.distinct().limit(count).sorted()
 				.collect(Collectors.toList()));
 
 		Queue<Long> sizes = new LinkedList<>();
 		sizes.addAll(Stream.generate(myRandomObject::nextLong)
-				.map(x -> Math.abs(x)%10000+1)
+				.map(x -> Math.abs(x)%1000000+100000)
 				.limit(count)
 				.collect(Collectors.toList()));
 
 		Queue<Long> lifetimes = new LinkedList<>();
 		lifetimes.addAll(Stream.generate(myRandomObject::nextLong)
-				.map(x -> Math.abs(x)%10000+1)
+				.map(x -> Math.abs(x)%10000+500)
 				.limit(count)
 				.collect(Collectors.toList()));
 

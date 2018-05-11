@@ -45,6 +45,9 @@ public class Survivor implements Heap {
 	}
 
 	@Override
+	public Long size() { return aSize + bSize - a.get(0).size() - b.get(0).size(); }
+	
+	@Override
 	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
 		GCSim.log("Commence garbage collection in "+this.toString()+".");
 		Long m = 0L;

@@ -4,23 +4,23 @@ package gcsim;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Eden implements Heap {
+public class Young implements Heap {
 	
 	private Long capacity;
 	private LinkedList<Object_T> addrSpace;
 	
-	private Eden(Long size) {
+	private Young(Long size) {
 		capacity = size;
 		addrSpace = new LinkedList<Object_T>();
 		addrSpace.add(Object_T.makeEmpty(capacity));
 	}
 	
-	public static Eden init(Long size) {
-		Eden n = new Eden(size);
-		GCSim.log("Eden generation of size "+n.addrSpace().get(0).size()+" intialized.");
+	public static Young init(Long size) {
+		Young n = new Young(size);
+		GCSim.log("Young generation of size "+n.addrSpace().get(0).size()+" intialized.");
 		return n;
 	}
-
+	
 	@Override
 	public Reference allocate(Object_T obj) throws OutOfMemoryException, InvalidObjectException {
 		Object_T free = addrSpace.get(0);
@@ -34,6 +34,8 @@ public class Eden implements Heap {
 		}
 		throw new OutOfMemoryException(this);
 	}
+
+	public Long size() { return capacity - addrSpace.get(0).size(); }
 
 	@Override
 	public List<Object_T> addrSpace() { return addrSpace; }

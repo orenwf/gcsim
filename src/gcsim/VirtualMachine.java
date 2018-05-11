@@ -20,8 +20,8 @@ public class VirtualMachine {
 	private Stack<Duration> pauseTimes;
 	
 	private VirtualMachine(List<Long> _sizes, HashMap<String, Queue<Long>> _rv) {
-		gen0 = Eden.init(_sizes.get(0));
-		gen1 = Survivor.init(_sizes.get(1));
+		gen0 = Young.init(_sizes.get(0));
+		gen1 = Young.init(_sizes.get(1));
 		gen2 = Mature.init(_sizes.get(2));
 		stack = new HashMap<Instant, Reference>();
 		randVarTable = _rv;
@@ -49,12 +49,10 @@ public class VirtualMachine {
 				Instant lifetime = Instant.now().plusMillis(randVarTable.get("lifetimes").poll());
 				Reference newRef = allocate(Object_T.generate(size.longValue(), stack));
 				stack.put(lifetime, newRef);
-				GCSim.log("Arrival of "+newRef.deref().toString()+" on Eden at "+arrival+" with size "+size+" referenced by "+newRef.toString()+" with lifetime "+lifetime+".");
+				GCSim.log("Arrival of "+newRef.deref().toString()+" at "+arrival+" with size "+size+" referenced by "+newRef.toString()+" with lifetime "+lifetime+".");
 			}
 		GCSim.log("The last arrival has occurred, VM halting!");
-		System.out.println(gen0.toString()+" state: "+gen0.addrSpace().stream().map(x -> x.size()).reduce(Long::sum)+" of "+gen0.addrSpace().size()+" words in use.");
-		System.out.println(gen1.toString()+" state: "+gen1.addrSpace().stream().map(x -> x.size()).reduce(Long::sum)+" of "+gen1.addrSpace().size()+" words in use.");
-		System.out.println(gen2.toString()+" state: "+gen2.addrSpace().stream().map(x -> x.size()).reduce(Long::sum)+" of "+gen2.addrSpace().size()+" words in use.");
+		showState();
 		return pauseTimes;
 	}
 	
@@ -62,6 +60,7 @@ public class VirtualMachine {
 		try { 
 			return gen0.allocate(o);
 		} catch (OutOfMemoryException oom) {
+			showState();
 			GCSim.log(oom.generation().toString()+" out of memory at "+oom.time()+".");
 			Duration d = invokeGC(oom.generation(), pause());
 			pauseTimes.push(d);
@@ -97,6 +96,7 @@ public class VirtualMachine {
 	}
 	
 	private Duration invokeGC(Heap gen, Instant pause) throws InvalidObjectException, InterruptedException {
+		showState();
 		if (gen == gen0) 
 			try {
 				stack = checkLive(stack, pause);
@@ -141,6 +141,12 @@ public class VirtualMachine {
 			List<Reference> g = ref.deref().refs().stream().collect(Collectors.toList());
 			for (Reference r : g) trace(r);
 		}
+	}
+	
+	private void showState() {
+		GCSim.log(gen0.toString()+": "+gen0.size()+" words in use.");
+		GCSim.log(gen1.toString()+": "+gen1.size()+" words in use.");
+		GCSim.log(gen2.toString()+": "+gen2.size()+" words in use.");
 	}
 	
 }

@@ -3,7 +3,7 @@ package tests;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import gcsim.Eden;
+import gcsim.Young;
 import gcsim.InvalidObjectException;
 import gcsim.Object_T;
 import gcsim.OutOfMemoryException;
@@ -14,7 +14,7 @@ public class HeapTests {
 	public static void main(String ... args) throws InvalidObjectException, InterruptedException {
 		Logger logger = Logger.getLogger("edu.gcsim.tests");
 		// TODO: Init Eden
-		Eden x = Eden.init(25L);
+		Young x = Young.init(25L);
 		
 		// TODO :allocate to Eden
 		try { x.allocate(Object_T.ofSize(25L)); 
@@ -58,7 +58,7 @@ public class HeapTests {
 		// TODO :overflow survivor 2 into survivor
 		
 		// TODO :overflow Eden into survivor
-		x = Eden.init(5L);
+		x = Young.init(5L);
 		y = Survivor.init(50L);
 		Object_T obj = Object_T.ofSize(5L);
 		obj.mark();
