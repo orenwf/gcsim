@@ -6,18 +6,18 @@ import java.util.List;
 
 public class Eden implements Heap {
 	
-	private Integer capacity;
+	private Long capacity;
 	private LinkedList<Object_T> addrSpace;
 	
-	private Eden(Integer size) {
+	private Eden(Long size) {
 		capacity = size;
 		addrSpace = new LinkedList<Object_T>();
 		addrSpace.add(Object_T.makeEmpty(capacity));
 	}
 	
-	public static Eden init(Integer size) {
+	public static Eden init(Long size) {
 		Eden n = new Eden(size);
-		GCSim.log("Eden generation of size "+size+" intialized.");
+		GCSim.log("Eden generation of size "+n.addrSpace().get(0).size()+" intialized.");
 		return n;
 	}
 
@@ -28,8 +28,8 @@ public class Eden implements Heap {
 			addrSpace.add(addrSpace.indexOf(free)+1, obj);
 			free.resize(obj.size());
 			Reference r = Reference.init(obj);
-			GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
-					+obj.toString()+" located on "+this.toString()+".");
+//			GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
+//					+obj.toString()+" located on "+this.toString()+".");
 			return r;
 		}
 		throw new OutOfMemoryException(this);
@@ -41,13 +41,13 @@ public class Eden implements Heap {
 	@Override
 	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
 		GCSim.log("Commence garbage collection in "+this.toString()+".");
-		Integer m = promote(target);
+		Long m = promote(target);
 		sweep();
 		GCSim.log("Garbage collection in "+this.toString()+" complete, freed "+m+" words.");
 	}
 
-	private Integer promote(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
-		Integer t = 0;
+	private Long promote(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
+		Long t = 0L;
 		for (Object_T i : addrSpace) {
 			Thread.sleep(VirtualMachine.work*VirtualMachine.sweepFactor);
 			if (addrSpace.indexOf(i) == 0) ;

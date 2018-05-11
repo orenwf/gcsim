@@ -6,19 +6,19 @@ import java.util.List;
 public class Survivor implements Heap {
 	
 	private static Integer AGELIMIT = 2;
-	private Integer aSize, bSize;
+	private Long aSize, bSize;
 	private List<Object_T> a;
 	private List<Object_T> b;
 	private List<Object_T> current;
 	
-	public static Survivor init(Integer size) {
+	public static Survivor init(Long size) {
 		Survivor s = new Survivor(size);
 		s.current = s.a;
-		GCSim.log("Survivor generation of size "+size+" intialized.");
+		GCSim.log("Survivor generation of size "+s.a.get(0).size()+" + "+s.b.get(0).size()+" intialized.");
 		return s;
 	}
 	
-	public Survivor(Integer size) {
+	public Survivor(Long size) {
 		aSize = size/2 + size%2;
 		bSize = size/2;
 		a = new LinkedList<>();
@@ -31,8 +31,8 @@ public class Survivor implements Heap {
 	public Reference allocate(Object_T obj) throws InvalidObjectException, OutOfMemoryException {
 		memcopy(obj, working());
 		Reference r = Reference.init(obj);
-		GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
-				+obj.toString()+" located on "+this.toString()+".");
+//		GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
+//				+obj.toString()+" located on "+this.toString()+".");
 		return r;
 	}
 
@@ -47,29 +47,30 @@ public class Survivor implements Heap {
 	@Override
 	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
 		GCSim.log("Commence garbage collection in "+this.toString()+".");
-		Integer m = stopAndCopy(working(), target);
-		swap();
-		sweep();
+		Long m = 0L;
+		swap();		// sets the newly swept and copied-into side as the working side
+		m = stopAndCopy(target);
+		sweep();	// sweeps the non-working side
 		GCSim.log("Garbage collection in "+this.toString()+" complete, freed "+m+" words.");
 	}
 	
 	private List<Object_T> working() { return current; }
 	
-	private List<Object_T> clean() { if (current == a) return b; else return a; }
+	private List<Object_T> nonWorking() { if (current == a) return b; else return a; }
 	
 	private void swap() { if (current == a) current = b; else current = a; }
 	
-	private Integer stopAndCopy(List<Object_T> working, Heap target) 
+	private Long stopAndCopy(Heap target) 
 			throws OutOfMemoryException, InvalidObjectException, InterruptedException {
 		LinkedList<Object_T> agedOut = new LinkedList<>();
-		Integer t = 0;
-		for (Object_T i : working) {
+		Long t = 0L;
+		for (int x=1; x < nonWorking().size(); x++) {
+			Object_T i = nonWorking().get(x);
 			Thread.sleep(VirtualMachine.work*VirtualMachine.sweepFactor);
-			if (working.indexOf(i) == 0) ;
-			else if (i.marked()) {
-				if (i.getAge() > AGELIMIT) agedOut.add(i);
-				else memcopy(i, clean());
+			if (i.marked()) {
 				i.incAge();
+				if (i.getAge() > AGELIMIT) agedOut.add(i);
+				else memcopy(i, working());
 			} else t += i.size();
 		}
 		promote(agedOut, target);
@@ -78,10 +79,11 @@ public class Survivor implements Heap {
 	
 	private void memcopy(Object_T obj, List<Object_T> target) 
 			throws OutOfMemoryException, InvalidObjectException {
-		Object_T free = working().get(0);
+		Object_T free = target.get(0);
 		if (free.size() >= obj.size()) {
-			current.add(current.indexOf(free)+1, obj);
+			target.add(target.indexOf(free)+1, obj);
 			free.resize(obj.size());
+			obj.unMark();
 			return;
 		}
 		throw new OutOfMemoryException(this);
@@ -93,8 +95,8 @@ public class Survivor implements Heap {
 	}
 	
 	private void sweep() {
-		Integer size;
-		if (clean() == a) size = aSize; else size = bSize;
+		Long size;
+		if (nonWorking() == a) size = aSize; else size = bSize;
 		LinkedList<Object_T> clean = new LinkedList<Object_T>();
 		clean.add(Object_T.makeEmpty(size));
 	}

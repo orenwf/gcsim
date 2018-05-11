@@ -7,15 +7,15 @@ import java.util.stream.Collectors;
 public class Mature implements Heap {
 	
 	List<Object_T> addrSpace;
-	Integer capacity;
+	Long capacity;
 	
-	public static Mature init(Integer size) {
+	public static Mature init(Long size) {
 		Mature x = new Mature(size);
-		GCSim.log("Mature generation of size "+size+" intialized.");
+		GCSim.log("Mature generation of size "+x.addrSpace().get(0).size()+" intialized.");
 		return x;
 	}
 
-	private Mature(Integer _size) {
+	private Mature(Long _size) {
 		capacity = _size;
 		addrSpace = new LinkedList<>();
 		addrSpace.add(Object_T.makeEmpty(capacity));
@@ -25,8 +25,8 @@ public class Mature implements Heap {
 	public Reference allocate(Object_T obj) throws InvalidObjectException, OutOfMemoryException {
 		memcopy(obj);
 		Reference r = Reference.init(obj);
-		GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
-				+obj.toString()+" located on "+this.toString()+".");
+//		GCSim.log(r.toString()+" initialized, pointing to newly allocated object "
+//				+obj.toString()+" located on "+this.toString()+".");
 		return r;
 	}
 
@@ -52,16 +52,17 @@ public class Mature implements Heap {
 		throw new OutOfMemoryException(this);
 	}
 	
-	private Integer sweepCompact() throws InterruptedException {
-		Integer reclaimed = 0;
-		for (Object_T i : addrSpace) {
+	private Long sweepCompact() throws InterruptedException {
+		Long reclaimed = 0L;
+		for (int x = 1; x < addrSpace.size(); x++) {
+			Object_T i = addrSpace.get(x);
 			Thread.sleep(VirtualMachine.work*VirtualMachine.sweepFactor);
-			if (addrSpace.indexOf(i) == 0) ;
-			else if (!i.marked()) {
+			if (!i.marked()) {
 				reclaimed += i.size();
 				addrSpace.remove(i);
 			}
 			i.incAge();
+			i.unMark();
 		}
 		addrSpace.set(0, Object_T.makeEmpty(reclaimed));
 		return reclaimed;

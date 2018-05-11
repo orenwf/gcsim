@@ -1,11 +1,11 @@
 package gcsim;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class Simulator {
 	
@@ -16,30 +16,37 @@ class Simulator {
 		myRandomObject = _r;
 	}
 	
-	public static Simulator init(Integer count) {
+	public static Simulator init(Integer _count) {
 		Simulator s = new Simulator(new Random());
+		s.count = _count;
 		return s;
 	}
 	
-	public HashMap<Class<?>, Object> generate() {
+	public HashMap<String, Queue<Long>> generate() {
 		
-		HashMap<Class<?>, Object> randVarTable = new HashMap<>();
+		HashMap<String, Queue<Long>> randVarTable = new HashMap<>();
 				
 		Queue<Long> arrivals = new LinkedList<>();
-		myRandomObject.longs(count, 0, 10000).distinct().boxed().sorted()
-								.forEach(x -> arrivals.add(x));
-		
-		Queue<Integer> sizes = new LinkedList<>();
-		myRandomObject.ints(count, 1, 1000).boxed()
-								.forEach(x -> sizes.add(x));
-		
-		Queue<Duration> lifetimes = new LinkedList<>();
-		myRandomObject.longs(count, 0, 10000).distinct().boxed()
-								.forEach(x -> lifetimes.add(Duration.ofMillis(x)));
-		
-		randVarTable.put(Integer.class, sizes);
-		randVarTable.put(Instant.class, arrivals);
-		randVarTable.put(Duration.class, lifetimes);
+		arrivals.addAll(Stream.generate(myRandomObject::nextLong)
+				.map(x -> Math.abs(x)%1000+1)
+				.distinct().limit(count).sorted()
+				.collect(Collectors.toList()));
+
+		Queue<Long> sizes = new LinkedList<>();
+		sizes.addAll(Stream.generate(myRandomObject::nextLong)
+				.map(x -> Math.abs(x)%10000+1)
+				.limit(count)
+				.collect(Collectors.toList()));
+
+		Queue<Long> lifetimes = new LinkedList<>();
+		lifetimes.addAll(Stream.generate(myRandomObject::nextLong)
+				.map(x -> Math.abs(x)%10000+1)
+				.limit(count)
+				.collect(Collectors.toList()));
+
+		randVarTable.put("sizes", sizes);
+		randVarTable.put("arrivals", arrivals);
+		randVarTable.put("lifetimes", lifetimes);
 		return randVarTable;
 	}
 }

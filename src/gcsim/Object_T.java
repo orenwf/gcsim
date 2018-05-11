@@ -8,38 +8,38 @@ import java.util.stream.Collectors;
 public class Object_T {
 	
 	private List<Reference> references;
-	private Integer size;
+	private Long size;
 	private boolean marked;
 	private Integer age;
 
 	
-	public static Object_T ofSize(Integer size) {
+	public static Object_T ofSize(Long size) {
 		Object_T o = new Object_T(size);
 		return o;
 	}
 	
-	public static Object_T makeEmpty(Integer size) {
+	public static Object_T makeEmpty(Long size) {
 		Object_T o = new Object_T(size);
 		return o;
 	}
 	
-	public static Object_T generate(Integer size, HashMap<Instant, Reference> stack) {
-		Object_T o = new Object_T(size.intValue());
+	public static Object_T generate(Long size, HashMap<Instant, Reference> stack) {
+		Object_T o = new Object_T(size);
 		Integer refs = new Integer((int) Math.log(size.doubleValue()));
 		o.references = stack.values().stream().distinct().limit(refs).collect(Collectors.toList());
 		return o;
 	}
 	
-	private Object_T(Integer words) {
+	private Object_T(Long words) {
 		size = words;
 		age = 0;
 		marked = false;
 	}
 	
 	// TODO: implement factory with random variables
-	public int size() { return size; }
+	public Long size() { return size; }
 	
-	public void resize(Integer x) throws InvalidObjectException {
+	public void resize(Long x) throws InvalidObjectException {
 		if (x <= size) size -= x;
 		else throw new InvalidObjectException();
 	}
@@ -47,6 +47,8 @@ public class Object_T {
 	public boolean marked() { return marked; }
 	
 	public void mark() { marked = true; }
+	
+	public void unMark() { marked = false; }
 	
 	public Integer getAge() { return age; }
 	
