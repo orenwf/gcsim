@@ -48,7 +48,8 @@ public class GCSim {
 		System.out.println("Total Pause Time: "+totalPause.toMillis()+".");
 		Double m = totalPause.toMillis()/(pauseTimes.size()*1.0d);
 		System.out.println("Average Pause Time: "+m);
-		Double v = Math.pow(totalPause.toMillis(), 2)/pauseTimes.size() - Math.pow(m, 2);
+		Double v = pauseTimes.stream().map(rvs -> Math.pow(((double)rvs.toMillis() - m),2))
+				.reduce(Double::sum).map(sum -> Math.sqrt(sum/pauseTimes.size())).get();
 		System.out.println("Variance of Pause Times: "+v+".");
 
 	}

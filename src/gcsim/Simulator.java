@@ -28,8 +28,8 @@ class Simulator {
 				
 		Queue<Long> arrivals = new LinkedList<>();
 		arrivals.addAll(Stream.generate(myRandomObject::nextLong)
-				.map(x -> Math.abs(x)%500+10)
-				.distinct().limit(count).sorted()
+				.map(x -> Math.abs(x)%1000+10)
+				.limit(count).sorted()
 				.collect(Collectors.toList()));
 
 		Queue<Long> sizes = new LinkedList<>();
