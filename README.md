@@ -9,13 +9,13 @@
 ## The probability model and mathematical justification
 
 ## How to install and run GCSim:
-1. Have a computer with Java JDK version 1.8 or higher
-  - http://openjdk.java.net/install/
+1. Have a computer with Java JDK version 1.8 or higher - download from: http://openjdk.java.net/install/
 2. Pull up a terminal
-3. Clone this repository
-4. `cd gcsim/src`
-5. `javac gcsim/GCSim.java`
-6. `cd ../bin`
-7. `java gcsim.GCSim`
-8. Follow the interactive command line instructions
-9. Profit!
+3. Clone this repository - for instructions: https://help.github.com/articles/cloning-a-repository/
+4. Issue the following commands in your terminal:
+  `cd gcsim/src`
+  `javac gcsim/GCSim.java`
+  `cd ../bin`
+  `java gcsim.GCSim`
+5. Follow the interactive command line instructions
+6. Profit!
