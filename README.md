@@ -1,5 +1,11 @@
 # GCSim
 
+1. What is this?
+2. What is garbage collection?
+3. How GCSim works.
+4. The probability model in GCSim.
+5. How do I use GCSim?
+
 ## A simulation of a virtual machine using generational tracing garbage collection.
 
 ### A high level overview of GC
