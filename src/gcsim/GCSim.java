@@ -36,7 +36,7 @@ public class GCSim {
 		Integer x = in.nextInt();
 		log("Simulating "+x+" objects.");
 
-                string filename = "out.txt"
+                string filename = "out.txt";
                 PrintWriter outputStream = new PrintWriter(filename);
                 
  
@@ -51,8 +51,7 @@ public class GCSim {
 				totalPause = totalPause.plus(d);
 			}
 			System.out.println("Total Pause Time: "+totalPause.toMillis()+".");
-                        outputStream.println(totalPause.toMillis()+",")
-			Double m = totalPause.toMillis()/(pauseTimes.size()*1.0d);
+                        outputStream.println(totalPause.toMillis()+",");
 			System.out.println("Average Pause Time: "+m);
 			Double v = pauseTimes.stream().map(rvs -> Math.pow(((double)rvs.toMillis() - m),2))
 					.reduce(Double::sum).map(sum -> Math.sqrt(sum/pauseTimes.size())).get();
