@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.io.PrintWriter;
 
 public class GCSim {
 	
@@ -35,22 +35,27 @@ public class GCSim {
 		System.out.println("Please enter the number of objects to be simulated.");
 		Integer x = in.nextInt();
 		log("Simulating "+x+" objects.");
-		
-		Simulator myRandomVarGenerator = Simulator.init(x);
-		VirtualMachine vm = VirtualMachine.init(sizes, myRandomVarGenerator.generate());
-		List<Duration> pauseTimes = vm.start();		
-		in.close();
-		Duration totalPause = Duration.ZERO;
-		for (Duration d : pauseTimes) {
-			System.out.println("Pause "+pauseTimes.indexOf(d)+": "+d.toMillis()+".");
-			totalPause = totalPause.plus(d);
-		}
-		System.out.println("Total Pause Time: "+totalPause.toMillis()+".");
-		Double m = totalPause.toMillis()/(pauseTimes.size()*1.0d);
-		System.out.println("Average Pause Time: "+m);
-		Double v = pauseTimes.stream().map(rvs -> Math.pow(((double)rvs.toMillis() - m),2))
-				.reduce(Double::sum).map(sum -> Math.sqrt(sum/pauseTimes.size())).get();
-		System.out.println("Variance of Pause Times: "+v+".");
+
+                FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+                for(int i = 0; i < 100; i++){		
+			Simulator myRandomVarGenerator = Simulator.init(x);
+			VirtualMachine vm = VirtualMachine.init(sizes, myRandomVarGenerator.generate());
+			List<Duration> pauseTimes = vm.start();		
+			in.close();
+			Duration totalPause = Duration.ZERO;
+			for (Duration d : pauseTimes) {
+				System.out.println("Pause "+pauseTimes.indexOf(d)+": "+d.toMillis()+".");
+				totalPause = totalPause.plus(d);
+			}
+			System.out.println("Total Pause Time: "+totalPause.toMillis()+".");
+        
+                         wb.write(fileOut);
+			Double m = totalPause.toMillis()/(pauseTimes.size()*1.0d);
+			System.out.println("Average Pause Time: "+m);
+			Double v = pauseTimes.stream().map(rvs -> Math.pow(((double)rvs.toMillis() - m),2))
+					.reduce(Double::sum).map(sum -> Math.sqrt(sum/pauseTimes.size())).get();
+			System.out.println("Variance of Pause Times: "+v+".");
+                }
 
 	}
 }
