@@ -36,7 +36,7 @@ public class GCSim {
 		Integer x = in.nextInt();
 		log("Simulating "+x+" objects.");
 
-                string filename = "out.txt";
+                String filename = "out.txt";
                 PrintWriter outputStream = new PrintWriter(filename);
                 
  
