@@ -36,6 +36,10 @@ public class GCSim {
 		Integer x = in.nextInt();
 		log("Simulating "+x+" objects.");
 
+                string filename = "out.txt"
+                PrintWriter outputStream = new PrintWriter(filename);
+                
+ 
                 for(int i = 0; i < 100; i++){		
 			Simulator myRandomVarGenerator = Simulator.init(x);
 			VirtualMachine vm = VirtualMachine.init(sizes, myRandomVarGenerator.generate());
@@ -47,8 +51,7 @@ public class GCSim {
 				totalPause = totalPause.plus(d);
 			}
 			System.out.println("Total Pause Time: "+totalPause.toMillis()+".");
-                         FileOutputStream fileOut = new FileOutputStream("workbook.xls");
-                         wb.write(fileOut);
+                        outputStream.println(totalPause.toMillis()+",")
 			Double m = totalPause.toMillis()/(pauseTimes.size()*1.0d);
 			System.out.println("Average Pause Time: "+m);
 			Double v = pauseTimes.stream().map(rvs -> Math.pow(((double)rvs.toMillis() - m),2))
