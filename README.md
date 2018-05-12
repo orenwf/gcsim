@@ -13,9 +13,9 @@
 2. Pull up a terminal
 3. Clone this repository - for instructions: https://help.github.com/articles/cloning-a-repository/
 4. Issue the following commands in your terminal:
-  `cd gcsim/src`
-  `javac gcsim/GCSim.java`
-  `cd ../bin`
-  `java gcsim.GCSim`
+* `cd gcsim/src`
+* `javac gcsim/GCSim.java`
+* `cd ../bin`
+* `java gcsim.GCSim`
 5. Follow the interactive command line instructions
 6. Profit!
