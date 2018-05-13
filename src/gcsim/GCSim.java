@@ -82,6 +82,15 @@ public class GCSim {
 		Simulator myRandomVarGenerator = Simulator.init(objects);
 		HashMap<String, Queue<Long>> randomVars = myRandomVarGenerator.generate();
 		log("Running "+simulations+"simulations per sampling distribution");		
+
+		PrintWriter pw = new PrintWriter(logName);
+		
+		randomVars.keySet().stream().forEach(x -> {
+			pw.println(x.toString());
+			randomVars.get(x).stream().forEach(y -> pw.println(y));
+			pw.println();
+		});
+		
 		
 		List<HashMap<String, Double>> experimentStats = new LinkedList<>();
 		
@@ -143,14 +152,6 @@ public class GCSim {
 			experimentStats.add(sampleDist);
 			
 		}
-		
-		PrintWriter pw = new PrintWriter(logName);
-		
-		randomVars.keySet().stream().forEach(x -> {
-			pw.println(x.toString());
-			randomVars.get(x).stream().forEach(y -> pw.println(y));
-			pw.println();
-		});
 		
 		for ( int i = 0; i < samplDists; i++) {
 			HashMap<String, Double> hm = experimentStats.get(i);
