@@ -125,27 +125,31 @@ public class GCSim {
 
 			HashMap<String, Double> sampleDist = new HashMap<>();
 			
-			Double meanTotalPause = sampleStats.stream().map(stats -> stats.get("total"))
+			Double meanPauseTotal = sampleStats.stream().map(stats -> stats.get("total"))
 					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
-			sampleDist.put("meanTotal", meanTotalPause);
+			sampleDist.put("meanTotal", meanPauseTotal);
+
+			Double varPauseTotal = sampleStats.stream()
+					.map(stats -> Math.pow(stats.get("total") - meanPauseTotal, 2))
+					.reduce(Double::sum).map(sum -> Math.sqrt(sum/sampleStats.size())).orElse(0d);
+			sampleDist.put("varTotal", varPauseTotal);
 			
 			Double meanPauseCount =  sampleStats.stream().map(stats -> stats.get("count"))
 					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
 			sampleDist.put("meanCount", meanPauseCount);
-			
-			Double meanMaxPause = sampleStats.stream().map(stats -> stats.get("max"))
-					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
-			sampleDist.put("meanMax", meanMaxPause);
-
-			Double varTotalPause = sampleStats.stream()
-					.map(stats -> Math.pow(stats.get("total") - meanTotalPause, 2))
-					.reduce(Double::sum).map(sum -> Math.sqrt(sum/sampleStats.size())).orElse(0d);
-			sampleDist.put("varTotal", varTotalPause);
-			
+						
 			Double varPauseCount = sampleStats.stream()
 					.map(stats -> Math.pow(stats.get("count") - meanPauseCount, 2))
 					.reduce(Double::sum).map(sum -> Math.sqrt(sum/sampleStats.size())).orElse(0d);
 			sampleDist.put("varCount", varPauseCount);
+
+			Double meanPauseMax = sampleStats.stream().map(stats -> stats.get("max"))
+					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
+			sampleDist.put("meanMax", meanPauseMax);
+			
+			Double meanPauseVar = sampleStats.stream().map(stats -> stats.get("variance"))
+					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
+			sampleDist.put("meanVar", meanPauseVar);
 			
 			Double ci = 0.0;
 			sampleDist.put("ci", ci);
