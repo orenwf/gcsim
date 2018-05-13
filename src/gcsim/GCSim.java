@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.PrintWriter;
+
 
 public class GCSim {
 	
@@ -50,7 +50,6 @@ public class GCSim {
 			objects = new Integer(Integer.parseInt(args[3]));
 			trials = new Integer(Integer.parseInt(args[4]));
 		}
-<<<<<<< HEAD
 		
 		List<HashMap<String, Double>> statistics = new LinkedList<>();
 		
@@ -58,37 +57,17 @@ public class GCSim {
 			Simulator myRandomVarGenerator = Simulator.init(objects);
 			VirtualMachine vm = VirtualMachine.init(sizes, myRandomVarGenerator.generate());
 			List<Duration> pauseTimes = vm.start();
-=======
-		System.out.println("Please enter the number of objects to be simulated.");
-		Integer x = in.nextInt();
-		log("Simulating "+x+" objects.");
-
-                String filename = "out.txt";
-                PrintWriter outputStream = new PrintWriter(filename);
-                
- 
-                for(int i = 0; i < 100; i++){		
-			Simulator myRandomVarGenerator = Simulator.init(x);
-			VirtualMachine vm = VirtualMachine.init(sizes, myRandomVarGenerator.generate());
-			List<Duration> pauseTimes = vm.start();		
-			in.close();
->>>>>>> 2702a40ac25a713c045cb423813577a527d264bb
 			Duration totalPause = Duration.ZERO;
 			for (Duration d : pauseTimes) {
 				System.out.println("Pause "+pauseTimes.indexOf(d)+": "+d.toMillis()+".");
 				totalPause = totalPause.plus(d);
 			}
 			System.out.println("Total Pause Time: "+totalPause.toMillis()+".");
-<<<<<<< HEAD
 			Double m = totalPause.toMillis()/(pauseTimes.size()*1.0d);
-=======
-                        outputStream.println(totalPause.toMillis()+",");
->>>>>>> 2702a40ac25a713c045cb423813577a527d264bb
 			System.out.println("Average Pause Time: "+m);
 			Double v = pauseTimes.stream().map(rvs -> Math.pow(((double)rvs.toMillis() - m),2))
 					.reduce(Double::sum).map(sum -> Math.sqrt(sum/pauseTimes.size())).get();
 			System.out.println("Variance of Pause Times: "+v+".");
-<<<<<<< HEAD
 			HashMap<String, Double> hm = new HashMap<>();
 			hm.put("count", pauseTimes.size()*1.0);
 			hm.put("total", totalPause.toMillis()*1.0);
@@ -103,9 +82,5 @@ public class GCSim {
 		Double variance = statistics.stream().map(stats -> Math.pow(stats.get("total") - mean, 2))
 				.reduce(Double::sum).map(sum -> Math.sqrt(sum/statistics.size())).get();
 		Double ci;
-=======
-                }
-
->>>>>>> 2702a40ac25a713c045cb423813577a527d264bb
 	}
 }
