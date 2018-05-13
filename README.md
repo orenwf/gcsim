@@ -16,11 +16,11 @@
 
 ## How to install and run GCSim:
 1. Have a computer with Java JDK version 1.8 or higher - download from: http://openjdk.java.net/install/
-2. Pull up a terminal
+2. Pull up a terminal In computer science, garbage collection (GC) is a form of automatic memory management. The garbage collector, or just collector, attempts to reclaim garbage, or memory occupied by objects that are no longer in use by the program.
 3. Clone this repository - for instructions: https://help.github.com/articles/cloning-a-repository/
 4. Issue the following commands in your terminal:
 * `cd gcsim/src`
-* `javac gcsim/GCSim.java`
+* `javac gcsim/*`
 * `cd ../bin`
 * `java gcsim.GCSim`
 5. Follow the interactive command line instructions
