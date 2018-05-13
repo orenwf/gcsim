@@ -1,12 +1,15 @@
 package gcsim;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,67 +23,143 @@ public class GCSim {
 	public static void log(String msg) {
 		logger.log(Level.INFO, " - "+msg);
 	}
-		
+	
+	private static ArrayList<Integer> getSizes(Scanner in) {
+		ArrayList<Integer> sample = new ArrayList<>();
+		for (Integer h = 0, j = 100; h < 3; h++) {
+			System.out.println("Set percentage of the heap for generation "+h+": "+j+" remaining: ");
+			int g = in.nextInt();
+			sample.add(g);
+			j-=g;
+			if (h == 2 && j > 0) sample.set(h, sample.get(h)+j);
+			log("Gen"+h+" = "+g+".");
+		}
+		return sample;
+	}
+	
 	public static void main(String ... args) 
 			throws IOException, InvalidObjectException, InterruptedException {
-		ArrayList<Integer> sizes = new ArrayList<>();
+		
+		Integer samplDists;
+		Integer simulations;
 		Integer objects;
-		Integer trials;
-		if (args.length < 5) {
-			final Scanner in = new Scanner(System.in);
-			for (Integer i = 0, j = 100; i < 3; i++) {
-				System.out.println("Set percentage of the heap for generation "+i+": "+j+" remaining: ");
-				int g = in.nextInt();
-				sizes.add(g);
-				j-=g;
-				if (i == 2 && j > 0) sizes.set(i, sizes.get(i)+j);
-				log("Gen"+i+" = "+g+".");
-			}
-			System.out.println("Please enter the number of objects to be simulated.");
+		List<ArrayList<Integer>> sizes = new LinkedList<>();
+		
+		final Scanner in = new Scanner(System.in);
+		
+		if (args.length < 6) {
+			System.out.println("How many sampling distributions (heap generation configurations) would you like to test? ");
+			samplDists = in.nextInt();
+			System.out.println("Please enter the number of simulations to run per sampling distribution: ");
+			simulations = in.nextInt();
+			System.out.println("Please enter the number of objects to be allocated per simulation: ");
 			objects = in.nextInt();
-			log("Simulating "+objects+" objects.");
-			System.out.println("Please enter the numeber of trials to run: ");
-			trials = in.nextInt();
-			log("Running "+trials+"simulations");		
-			in.close();
+			for (int s = 0; s < samplDists; s++) sizes.add(getSizes(in));
 		} else {
-			sizes.add(new Integer(Integer.parseInt(args[0])));
-			sizes.add(new Integer(Integer.parseInt(args[1])));
-			sizes.add(new Integer(Integer.parseInt(args[2])));
-			objects = new Integer(Integer.parseInt(args[3]));
-			trials = new Integer(Integer.parseInt(args[4]));
-		}
-		
-		List<HashMap<String, Double>> statistics = new LinkedList<>();
-		
-		for (int i = 0; i < trials; i++) {
-			Simulator myRandomVarGenerator = Simulator.init(objects);
-			VirtualMachine vm = VirtualMachine.init(sizes, myRandomVarGenerator.generate());
-			List<Duration> pauseTimes = vm.start();
-			Duration totalPause = Duration.ZERO;
-			for (Duration d : pauseTimes) {
-				System.out.println("Pause "+pauseTimes.indexOf(d)+": "+d.toMillis()+".");
-				totalPause = totalPause.plus(d);
+			samplDists = new Integer(Integer.parseInt(args[0]));
+			simulations = new Integer(Integer.parseInt(args[1]));
+			objects = new Integer(Integer.parseInt(args[2]));
+			if (args.length % 3 != 0) { 
+				System.out.println("You've entered an invalid number of heap configuration arguments based on "+samplDists+" sample distributions.");
+				for (int s = 0; s < samplDists; s++) sizes.add(getSizes(in));
 			}
-			System.out.println("Total Pause Time: "+totalPause.toMillis()+".");
-			Double m = totalPause.toMillis()/(pauseTimes.size()*1.0d);
-			System.out.println("Average Pause Time: "+m);
-			Double v = pauseTimes.stream().map(rvs -> Math.pow(((double)rvs.toMillis() - m),2))
-					.reduce(Double::sum).map(sum -> Math.sqrt(sum/pauseTimes.size())).get();
-			System.out.println("Variance of Pause Times: "+v+".");
-			HashMap<String, Double> hm = new HashMap<>();
-			hm.put("count", pauseTimes.size()*1.0);
-			hm.put("total", totalPause.toMillis()*1.0);
-			hm.put("mean", m);
-			hm.put("variance", v);
-			statistics.add(hm);
+			else {
+				for ( int s = 3; s < samplDists; s++) {
+					ArrayList<Integer> sample = new ArrayList<>();
+					for ( int  i = 0; i < 3; i++) sample.add(new Integer(Integer.parseInt(args[s+i])));
+					if ( sample.stream().reduce(Integer::sum).get().compareTo(100) == 0) sizes.add(sample);
+					else {
+						System.out.println("You've entered an invalid heap configuration for some sample distribution.");
+						for (int sampl = 0; sampl < samplDists; sampl++) sizes.add(getSizes(in));
+					}
+				}
+			}
+		}
+
+		in.close();
+		
+		log("Simulating "+objects+" objects per simulation.");
+		Simulator myRandomVarGenerator = Simulator.init(objects);
+		HashMap<String, Queue<Long>> randomVars = myRandomVarGenerator.generate();
+		log("Running "+simulations+"simulations per sampling distribution");		
+		
+		List<HashMap<String, Double>> experimentStats = new LinkedList<>();
+		
+		for (int h = 0; h < samplDists; h++) {
+
+			List<HashMap<String, Double>> sampleStats = new LinkedList<>();
+
+			for (int i = 0; i < simulations; i++) {
+				VirtualMachine vm = VirtualMachine.init(sizes.get(h), randomVars);
+				List<Duration> pauseTimes = vm.start();
+				Duration totalPause = Duration.ZERO;
+				for (Duration d : pauseTimes) {
+					System.out.println("Pause "+pauseTimes.indexOf(d)+": "+d.toMillis()+".");
+					totalPause = totalPause.plus(d);
+				}
+				System.out.println("Total Pause Time: "+totalPause.toMillis()+".");
+				Double max = pauseTimes.stream().map(x -> Long.valueOf(x.toMillis()))
+						.max(Comparator.comparing(Long::valueOf)).map(x -> x*1.0).orElse(0d);
+				Double mean = totalPause.toMillis()/(pauseTimes.size()*1.0d);
+				System.out.println("Average Pause Time: "+mean);
+				Double variance = pauseTimes.stream().map(rvs -> Math.pow(((double)rvs.toMillis() - mean),2))
+						.reduce(Double::sum).map(sum -> Math.sqrt(sum/pauseTimes.size())).orElse(0d);
+				System.out.println("Variance of Pause Times: "+variance+".");
+				HashMap<String, Double> simStats = new HashMap<>();
+				simStats.put("max", max);
+				simStats.put("count", pauseTimes.size()*1.0);		// how many pauses
+				simStats.put("total", totalPause.toMillis()*1.0);	// total pause time
+				simStats.put("mean", mean);							// mean pause time
+				simStats.put("variance", variance);						// variance of pause time
+				sampleStats.add(simStats);
+			}
+
+			HashMap<String, Double> sampleDist = new HashMap<>();
+			
+			Double meanTotalPause = sampleStats.stream().map(stats -> stats.get("total"))
+					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
+			sampleDist.put("meanTotal", meanTotalPause);
+			
+			Double meanPauseCount =  sampleStats.stream().map(stats -> stats.get("count"))
+					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
+			sampleDist.put("meanCount", meanPauseCount);
+			
+			Double meanMaxPause = sampleStats.stream().map(stats -> stats.get("max"))
+					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
+			sampleDist.put("meanMax", meanMaxPause);
+
+			Double varTotalPause = sampleStats.stream()
+					.map(stats -> Math.pow(stats.get("total") - meanTotalPause, 2))
+					.reduce(Double::sum).map(sum -> Math.sqrt(sum/sampleStats.size())).orElse(0d);
+			sampleDist.put("varTotal", varTotalPause);
+			
+			Double varPauseCount = sampleStats.stream()
+					.map(stats -> Math.pow(stats.get("count") - meanPauseCount, 2))
+					.reduce(Double::sum).map(sum -> Math.sqrt(sum/sampleStats.size())).orElse(0d);
+			sampleDist.put("varCount", varPauseCount);
+			
+			Double ci = 0.0;
+			sampleDist.put("ci", ci);
+			experimentStats.add(sampleDist);
+			
 		}
 		
-		Double mean = statistics.stream().map(stats -> stats.get("total"))
-				.reduce(Double::sum).map(sum -> sum/statistics.size()).get();
+		PrintWriter pw = new PrintWriter(logName);
 		
-		Double variance = statistics.stream().map(stats -> Math.pow(stats.get("total") - mean, 2))
-				.reduce(Double::sum).map(sum -> Math.sqrt(sum/statistics.size())).get();
-		Double ci;
+		randomVars.keySet().stream().forEach(x -> {
+			pw.println(x.toString());
+			randomVars.get(x).stream().forEach(y -> pw.println(y));
+			pw.println();
+		});
+		
+		for ( int i = 0; i < samplDists; i++) {
+			HashMap<String, Double> hm = experimentStats.get(i);
+			pw.println(sizes.get(i).toString());
+			System.out.println(sizes.get(i).toString());
+			hm.keySet().stream().sorted().forEach(x -> pw.println(x.toString()+": "+hm.get(x).toString()));
+			hm.keySet().stream().sorted().forEach(x -> System.out.println(x.toString()+": "+hm.get(x).toString()));
+		}
+		
+		pw.close();
 	}
 }
