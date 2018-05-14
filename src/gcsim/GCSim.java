@@ -13,6 +13,7 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 public class GCSim {
@@ -99,7 +100,14 @@ public class GCSim {
 			List<HashMap<String, Double>> sampleStats = new LinkedList<>();
 
 			for (int i = 0; i < simulations; i++) {
-				VirtualMachine vm = VirtualMachine.init(sizes.get(h), randomVars);
+				HashMap<String, Queue<Long>> mhm = new HashMap<>();
+				Queue<Long> sizesQ = randomVars.get("sizes").stream().collect(Collectors.toCollection(LinkedList::new));
+				mhm.put("sizes", sizesQ);
+				Queue<Long> arrivalsQ = randomVars.get("arrivals").stream().collect(Collectors.toCollection(LinkedList::new));
+				mhm.put("arrivals", arrivalsQ);
+				Queue<Long> lifetimesQ = randomVars.get("lifetimes").stream().collect(Collectors.toCollection(LinkedList::new));
+				mhm.put("lifetimes", lifetimesQ);
+				VirtualMachine vm = VirtualMachine.init(sizes.get(h), mhm);
 				List<Duration> pauseTimes = vm.start();
 				Duration totalPause = Duration.ZERO;
 				for (Duration d : pauseTimes) {
@@ -107,47 +115,44 @@ public class GCSim {
 					totalPause = totalPause.plus(d);
 				}
 				System.out.println("Total Pause Time: "+totalPause.toMillis()+".");
-				Double max = pauseTimes.stream().map(x -> Long.valueOf(x.toMillis()))
-						.max(Comparator.comparing(Long::valueOf)).map(x -> x*1.0).orElse(0d);
 				Double mean = totalPause.toMillis()/(pauseTimes.size()*1.0d);
 				System.out.println("Average Pause Time: "+mean);
 				Double variance = pauseTimes.stream().map(rvs -> Math.pow(((double)rvs.toMillis() - mean),2))
 						.reduce(Double::sum).map(sum -> Math.sqrt(sum/pauseTimes.size())).orElse(0d);
 				System.out.println("Variance of Pause Times: "+variance+".");
 				HashMap<String, Double> simStats = new HashMap<>();
-				simStats.put("max", max);
 				simStats.put("count", pauseTimes.size()*1.0);		// how many pauses
 				simStats.put("total", totalPause.toMillis()*1.0);	// total pause time
 				simStats.put("mean", mean);							// mean pause time
-				simStats.put("variance", variance);						// variance of pause time
+				simStats.put("variance", variance);					// variance of pause time
 				sampleStats.add(simStats);
 			}
 
 			HashMap<String, Double> sampleDist = new HashMap<>();
 			
-			Double meanPauseTotal = sampleStats.stream().map(stats -> stats.get("total"))
-					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
+			Double meanPauseTotal = sampleStats.stream()	// mean of the total pause times for a sample distribution
+					.map(stats -> stats.get("total"))
+					.reduce(Double::sum)
+					.map(sum -> sum/sampleStats.size()).orElse(0d);
 			sampleDist.put("meanTotal", meanPauseTotal);
 
-			Double varPauseTotal = sampleStats.stream()
+			Double varPauseTotal = sampleStats.stream()		// variance of the total pause times for a sample distribution
 					.map(stats -> Math.pow(stats.get("total") - meanPauseTotal, 2))
 					.reduce(Double::sum).map(sum -> Math.sqrt(sum/sampleStats.size())).orElse(0d);
 			sampleDist.put("varTotal", varPauseTotal);
 			
-			Double meanPauseCount =  sampleStats.stream().map(stats -> stats.get("count"))
+			Double meanPauseCount =  sampleStats.stream()	// mean of the total number of pauses for a sample distribution
+					.map(stats -> stats.get("count"))
 					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
 			sampleDist.put("meanCount", meanPauseCount);
 						
-			Double varPauseCount = sampleStats.stream()
+			Double varPauseCount = sampleStats.stream()		// variance of the total number of pauses for a sample dist.
 					.map(stats -> Math.pow(stats.get("count") - meanPauseCount, 2))
 					.reduce(Double::sum).map(sum -> Math.sqrt(sum/sampleStats.size())).orElse(0d);
 			sampleDist.put("varCount", varPauseCount);
-
-			Double meanPauseMax = sampleStats.stream().map(stats -> stats.get("max"))
-					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
-			sampleDist.put("meanMax", meanPauseMax);
 			
-			Double meanPauseVar = sampleStats.stream().map(stats -> stats.get("variance"))
+			Double meanPauseVar = sampleStats.stream()		// mean of the variances of pause times for a sample dist.
+					.map(stats -> stats.get("variance"))
 					.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
 			sampleDist.put("meanVar", meanPauseVar);
 			
