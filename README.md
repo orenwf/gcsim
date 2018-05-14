@@ -7,6 +7,7 @@
 5. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
 
 ## A simulation of a virtual machine using generational tracing garbage collection.
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 
 ### A high level overview of GC
 In computer science, garbage collection (GC) is a form of automatic memory management. The garbage collector, or just collector, attempts to reclaim garbage, or memory occupied by objects that are no longer in use by the program.
