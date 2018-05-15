@@ -8,8 +8,10 @@
 
 ## A simulation of a virtual machine using generational tracing garbage collection.
 A high level implementation of a mark-sweep garbage collector.
+
 Java Heap Memory
 It is essential to understand the role of heap memory in JVM memory model. At runtime the Java instances are stored in the heap memory area. When an object is not referenced anymore it becomes eligible for eviction from heap memory. During garbage collection process, those objects are evicted from heap memory and the space is reclaimed. Heap memory has three major areas,
+![Image of Yaktocat](https://javapapers.com/wp-content/uploads/2014/10/Java-Heap-Memory.jpg)
 
 Young Generation
 Eden Space (any instance enters the runtime memory area through eden)
