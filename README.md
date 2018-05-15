@@ -10,7 +10,22 @@
 A high level implementation of a mark-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to answer questions about how the duration and variance of pause times during garbage collection in an executing process depend on the design of the garbage collection algorithm, given some assumptions made about the distributions of frequency of object allocation in heap memory, object sizes, and object lifetimes. This simulation will produce results which could indicate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
 
 ## A high level overview of GC
-Broadly, garbage collection (GC) is a form of automatic memory management. Garbage collection is performed by a procedure which attempts to reclaim memory occupied by objects (which we will define as arbitrary aggregations of memory that represent information relevant to the executing program) that were once dynamically allocated (during program execution, rather than prior) from a finite pool of memory (the heap) reserved by the operating system for the executing program, but are no longer in use by the program. 
+Broadly, garbage collection (GC) is a form of automatic memory management. Garbage collection is performed by a procedure which attempts to reclaim memory occupied by objects that were once dynamically allocated (during program execution, rather than prior) from a finite pool of memory (the heap) reserved by the operating system for the executing program, but are no longer in use by the program. 
+
+### An Object
+An arbitrary aggregations of contiguous and non-contiguous memory address space whose value represents information relevant to the executing program. An example would be an integer, a string, or a reference to an other object. More complex objects can exist and contain other types of objects or contain references to other objects.
+
+### A Reference
+An object whose value is the address in logical memory of an other object. A reference may also carry with it other types of data, such as 'metadata'. A directed graph of references is typically referred to as a reference graph or tree.
+
+### The 'Stack'
+In a memory-managed programming language such as Java, the stack only holds references to other objects. It represents the entire collection of references which are held by the currently executing program, wherein the stack contains all of the root references of all reference graphs.
+
+### The 'Heap'
+
+### Allocaction
+
+## Garbage Collection Paradigms
 
 There exist a small number of algorithms for performing garbage collection. An implementation of one of these algorithms is sometimes referred to as a "Garbage Collector". Generally, these implementations fall into two archetypes.
 
