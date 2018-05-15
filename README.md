@@ -59,7 +59,8 @@ These parameters can be configured via the VM's constructor VM(threshold, heapSi
 4. Issue the following commands in your terminal:
 * `cd gcsim/src`
 * `javac gcsim/*`
-* `cd ../bin`
 * `java gcsim.GCSim`
 5. Follow the interactive command line instructions
-6. Profit!
+6. View the results of the simulation in the terminal output, or in the generated text file.
+
+## Further reading and useful links
