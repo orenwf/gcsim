@@ -12,10 +12,10 @@ A high level implementation of a mark-sweep garbage collector (GC) performing au
 ## A high level overview of GC
 Broadly, garbage collection (GC) is a form of automatic memory management. Garbage collection is performed by a procedure which attempts to reclaim memory occupied by objects (which we will define as arbitrary aggregations of memory that represent information relevant to the executing program) that were once dynamically allocated (during program execution, rather than prior) from a finite pool of memory (the heap) reserved by the operating system for the executing program, but are no longer in use by the program. 
 
-There exist a small number of algorithms for performing garbage collection. An implementation of one of these algorithms is sometimes referred to as a "Garbage Collector".
+There exist a small number of algorithms for performing garbage collection. An implementation of one of these algorithms is sometimes referred to as a "Garbage Collector". Generally, these implementations fall into two archetypes.
 
 ### Reference counting
-As a collection algorithm, reference counting tracks, for each object, a count of the number of references to it held by other objects. If an object's reference count reaches zero, the object has become inaccessible, and can be destroyed.
+Reference counting tracks, for each object, a count of the number of references to it held by other objects. If an object's reference count reaches zero, the object has become inaccessible, and can be destroyed. Reference counting algorithms have a number of advantages, specifically that they do not incur pauses in execution that are common in the other main type of garbage collector, detailed in the next paragraph. One notable disadvantage of this type of garbage collection is the possibility of circular references, by which an object maintains a reference to itself, while no other reference to it exists. Therefore the object's reference count can never reach zero, but no other object references it, so it cannot be directly accessed in order to fix the problem. Our simulation does not implement this type of garbage collection.
 
 ### Mark and Sweep 
 Mark and sweep is a technique in Garbage Collection to free all unreferenced objects.
