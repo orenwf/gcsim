@@ -7,10 +7,12 @@
 5. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
 
 ## Simulating a virtual machine using generational tracing garbage collection.
-A high level implementation of a mark-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to demonstrate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
+A high level implementation of a mark-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to answer questions about how the duration and variance of pause times during garbage collection in an executing process depend on the design of the garbage collection algorithm, given some assumptions made about the distributions of frequency of object allocation in heap memory, object sizes, and object lifetimes. This simulation will produce results which could indicate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
 
 ## A high level overview of GC
-In computer science, garbage collection (GC) is a form of automatic memory management. The garbage collector, or just collector, attempts to reclaim garbage, or memory occupied by objects that are no longer in use by the program.
+Broadly, garbage collection (GC) is a form of automatic memory management. Garbage collection is performed by a procedure which attempts to reclaim memory occupied by objects (which we will define as arbitrary aggregations of memory that represent information relevant to the executing program) that were once dynamically allocated (during program execution, rather than prior) from a finite pool of memory (the heap) reserved by the operating system for the executing program, but are no longer in use by the program. 
+
+There exist a small number of algorithms for performing garbage collection. An implementation of one of these algorithms is sometimes referred to as a "Garbage Collector".
 
 ### Reference counting
 As a collection algorithm, reference counting tracks, for each object, a count of the number of references to it held by other objects. If an object's reference count reaches zero, the object has become inaccessible, and can be destroyed.
