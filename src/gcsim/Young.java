@@ -8,17 +8,19 @@ public class Young implements Heap {
 	
 	private Long capacity;
 	private LinkedList<Object_T> addrSpace;
+	private final SampleDistribution sampDist;
 	
-	private Young(Long size) {
+	public static Young init(Long size, SampleDistribution sd) {
+		Young n = new Young(size, sd);
+		sd.log("Young generation of size "+n.addrSpace().get(0).size()+" intialized.");
+		return n;
+	}
+	
+	private Young(Long size, SampleDistribution sd) {
 		capacity = size;
 		addrSpace = new LinkedList<Object_T>();
 		addrSpace.add(Object_T.makeEmpty(capacity));
-	}
-	
-	public static Young init(Long size) {
-		Young n = new Young(size);
-		GCSim.log("Young generation of size "+n.addrSpace().get(0).size()+" intialized.");
-		return n;
+		sampDist = sd;
 	}
 	
 	@Override
@@ -42,10 +44,10 @@ public class Young implements Heap {
 	
 	@Override
 	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
-		GCSim.log("Commence garbage collection in "+this.toString()+".");
+		sampDist.log("Commence garbage collection in "+this.toString()+".");
 		Long m = promote(target);
 		sweep();
-		GCSim.log("Garbage collection in "+this.toString()+" complete, freed "+m+" words.");
+		sampDist.log("Garbage collection in "+this.toString()+" complete, freed "+m+" words.");
 	}
 
 	private Long promote(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {

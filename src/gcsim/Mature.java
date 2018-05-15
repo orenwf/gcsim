@@ -6,19 +6,21 @@ import java.util.stream.Collectors;
 
 public class Mature implements Heap {
 	
+	private final SampleDistribution sampDist;
 	List<Object_T> addrSpace;
 	Long capacity;
 	
-	public static Mature init(Long size) {
-		Mature x = new Mature(size);
-		GCSim.log("Mature generation of size "+x.addrSpace().get(0).size()+" intialized.");
+	public static Mature init(Long size, SampleDistribution sd) {
+		Mature x = new Mature(size, sd);
+		sd.log("Mature generation of size "+x.addrSpace().get(0).size()+" intialized.");
 		return x;
 	}
 
-	private Mature(Long _size) {
+	private Mature(Long _size, SampleDistribution sd) {
 		capacity = _size;
 		addrSpace = new LinkedList<>();
 		addrSpace.add(Object_T.makeEmpty(capacity));
+		sampDist = sd;
 	}
 	
 	@Override
@@ -41,8 +43,8 @@ public class Mature implements Heap {
 
 	@Override
 	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
-		GCSim.log("Commence garbage collection in "+this.toString()+".");
-		GCSim.log("Garbage collection in "+this.toString()+" complete, reclaiming "+sweepCompact()+" words.");
+		sampDist.log("Commence garbage collection in "+this.toString()+".");
+		sampDist.log("Garbage collection in "+this.toString()+" complete, reclaiming "+sweepCompact()+" words.");
 	}
 	
 	private void memcopy(Object_T obj) throws OutOfMemoryException, InvalidObjectException {

@@ -15,33 +15,35 @@ public class VirtualMachine {
 	public static final Integer sweepFactor = 2;
 	private static final Long memory = 134_217_728L;	// this is 1 GB divided into 8 byte words
 	private HashMap<Instant, Reference> stack;			// the thread-or-stack reference pool
+	private final SampleDistribution sampDist;
 	private Heap gen0, gen1, gen2;
 	private HashMap<String, Queue<Long>> randVarTable;
 	private Stack<Duration> pauseTimes;
 	
-	private VirtualMachine(List<Long> _sizes, HashMap<String, Queue<Long>> _rv) {
-		gen0 = Young.init(_sizes.get(0));
-		gen1 = Young.init(_sizes.get(1));
-		gen2 = Mature.init(_sizes.get(2));
-		stack = new HashMap<Instant, Reference>();
-		randVarTable = _rv;
-		pauseTimes = new Stack<>();
-	}
-	
-	public static VirtualMachine init(List<Integer> proportions, HashMap<String, Queue<Long>> rv) {
+	public static VirtualMachine init(List<Integer> proportions, HashMap<String, Queue<Long>> rv, SampleDistribution sd) {
 		List<Long> sizes = new LinkedList<>();
 		for (Integer i : proportions) {
 			Long m = new Long(memory);
 			Long x = (long) (i*m/100);
 			sizes.add(x);
 		}
-		VirtualMachine vm = new VirtualMachine(sizes, rv);
-		GCSim.log(vm.toString()+" initialized.");
+		VirtualMachine vm = new VirtualMachine(sizes, rv, sd);
+		vm.sampDist.log(vm.toString()+" initialized.");
 		return vm;
 	}
 
+	private VirtualMachine(List<Long> _sizes, HashMap<String, Queue<Long>> _rv, SampleDistribution sd) {
+		stack = new HashMap<Instant, Reference>();
+		randVarTable = _rv;
+		pauseTimes = new Stack<>();
+		sampDist = sd;
+		gen0 = Young.init(_sizes.get(0), sd);
+		gen1 = Young.init(_sizes.get(1), sd);
+		gen2 = Mature.init(_sizes.get(2), sd);
+	}
+	
 	public List<Duration> start() throws InvalidObjectException, InterruptedException {
-		GCSim.log(this.toString()+" started.");
+		sampDist.log(this.toString()+" started.");
 		while (randVarTable.get("arrivals").size() > 0) {
 				Instant arrival = Instant.now().plusMillis(randVarTable.get("arrivals").poll());
 /*spin-lock*/	while (waitingArrival(arrival)) /* spin-lock*/ ;
@@ -49,9 +51,9 @@ public class VirtualMachine {
 				Instant lifetime = Instant.now().plusMillis(randVarTable.get("lifetimes").poll());
 				Reference newRef = allocate(Object_T.generate(size.longValue(), stack));
 				stack.put(lifetime, newRef);
-				GCSim.log("Arrival of "+newRef.deref().toString()+" at "+arrival+" with size "+size+" referenced by "+newRef.toString()+" with lifetime "+lifetime+".");
+				sampDist.log("Arrival of "+newRef.deref().toString()+" at "+arrival+" with size "+size+" referenced by "+newRef.toString()+" with lifetime "+lifetime+".");
 			}
-		GCSim.log("The last arrival has occurred, VM halting!");
+		sampDist.log("The last arrival has occurred, VM halting!");
 		showState();
 		return pauseTimes;
 	}
@@ -61,7 +63,7 @@ public class VirtualMachine {
 			return gen0.allocate(o);
 		} catch (OutOfMemoryException oom) {
 			showState();
-			GCSim.log(oom.generation().toString()+" out of memory at "+oom.time()+".");
+			sampDist.log(oom.generation().toString()+" out of memory at "+oom.time()+".");
 			Duration d = invokeGC(oom.generation(), pause());
 			pauseTimes.push(d);
 			return allocate(o);
@@ -70,13 +72,13 @@ public class VirtualMachine {
 	
 	private Instant pause() {
 		Instant now = Instant.now();
-		GCSim.log(this.toString()+" paused.");
+		sampDist.log(this.toString()+" paused.");
 		return now;
 	}
 	
 	private Instant resume() {
 		Instant now = Instant.now();
-		GCSim.log(this.toString()+" resumed.");
+		sampDist.log(this.toString()+" resumed.");
 		return now;
 	}
 
@@ -103,21 +105,21 @@ public class VirtualMachine {
 				initTrace(gen0);
 				gen.GC(gen1);
 			} catch (OutOfMemoryException oom) {
-				GCSim.log(oom.generation().toString()+" out of memory at "+oom.time()+".");
+				sampDist.log(oom.generation().toString()+" out of memory at "+oom.time()+".");
 				return invokeGC(oom.generation(), pause); 
 		} else if (gen == gen1) 
 			try {
 				initTrace(gen1);
 				gen.GC(gen2);
 			} catch (OutOfMemoryException oom) {
-				GCSim.log(oom.generation().toString()+" out of memory at "+oom.time()+".");
+				sampDist.log(oom.generation().toString()+" out of memory at "+oom.time()+".");
 				return invokeGC(oom.generation(), pause); 
 		} else if (gen == gen2) 
 			try {
 				initTrace(gen2);
 				gen.GC(gen2);
 			} catch (OutOfMemoryException oom) { 
-				GCSim.log(oom.generation().toString()+" out of memory at "+oom.time()+".");
+				sampDist.log(oom.generation().toString()+" out of memory at "+oom.time()+".");
 				return invokeGC(oom.generation(), pause);
 			} 
 		Instant resume = resume();
@@ -126,17 +128,17 @@ public class VirtualMachine {
 	
 	private void initTrace(Heap gen) throws InterruptedException {
 		String sg = gen.toString();
-		GCSim.log("Commenced tracing generation(s): "+sg+".");
+		sampDist.log("Commenced tracing generation(s): "+sg+".");
 		for (Reference i : stack.values()) {
 			trace(i);
 		}
-		GCSim.log("Completed tracing.");
+		sampDist.log("Completed tracing.");
 	}
 		
 	private void trace(Reference ref) throws InterruptedException {
 		Thread.sleep(work*markFactor);
 		if (!ref.deref().marked()) {
-			GCSim.log("Now visiting "+ref.deref().toString()+".");
+			sampDist.log("Now visiting "+ref.deref().toString()+".");
 			ref.deref().mark();
 			List<Reference> g = ref.deref().refs().stream().collect(Collectors.toList());
 			for (Reference r : g) trace(r);
@@ -144,9 +146,9 @@ public class VirtualMachine {
 	}
 	
 	private void showState() {
-		GCSim.log(gen0.toString()+": "+gen0.size()+" words in use.");
-		GCSim.log(gen1.toString()+": "+gen1.size()+" words in use.");
-		GCSim.log(gen2.toString()+": "+gen2.size()+" words in use.");
+		sampDist.log(gen0.toString()+": "+gen0.size()+" words in use.");
+		sampDist.log(gen1.toString()+": "+gen1.size()+" words in use.");
+		sampDist.log(gen2.toString()+": "+gen2.size()+" words in use.");
 	}
 	
 }

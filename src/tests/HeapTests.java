@@ -14,7 +14,7 @@ public class HeapTests {
 	public static void main(String ... args) throws InvalidObjectException, InterruptedException {
 		Logger logger = Logger.getLogger("edu.gcsim.tests");
 		// TODO: Init Eden
-		Young x = Young.init(25L);
+		Young x = Young.init(25L, null);
 		
 		// TODO :allocate to Eden
 		try { x.allocate(Object_T.ofSize(25L)); 
@@ -25,7 +25,7 @@ public class HeapTests {
 		} catch (OutOfMemoryException e1) { logger.log(Level.INFO, x.addrSpace().toString()); }
 		
 		// TODO :Init Survivor
-		Survivor y = Survivor.init(50L);
+		Survivor y = Survivor.init(50L, null);
 		
 		// TODO :allocate to Survivor
 		try { y.allocate(Object_T.ofSize(20L)); 
@@ -58,8 +58,8 @@ public class HeapTests {
 		// TODO :overflow survivor 2 into survivor
 		
 		// TODO :overflow Eden into survivor
-		x = Young.init(5L);
-		y = Survivor.init(50L);
+		x = Young.init(5L, null);
+		y = Survivor.init(50L, null);
 		Object_T obj = Object_T.ofSize(5L);
 		obj.mark();
 		try { 

@@ -10,21 +10,23 @@ public class Survivor implements Heap {
 	private List<Object_T> a;
 	private List<Object_T> b;
 	private List<Object_T> current;
+	private final SampleDistribution sampDist;
 	
-	public static Survivor init(Long size) {
-		Survivor s = new Survivor(size);
+	public static Survivor init(Long size, SampleDistribution sd) {
+		Survivor s = new Survivor(size, sd);
 		s.current = s.a;
-		GCSim.log("Survivor generation of size "+s.a.get(0).size()+" + "+s.b.get(0).size()+" intialized.");
+		sd.log("Survivor generation of size "+s.a.get(0).size()+" + "+s.b.get(0).size()+" intialized.");
 		return s;
 	}
 	
-	public Survivor(Long size) {
+	public Survivor(Long size, SampleDistribution sd) {
 		aSize = size/2 + size%2;
 		bSize = size/2;
 		a = new LinkedList<>();
 		b = new LinkedList<>();
 		a.add(Object_T.makeEmpty(aSize));
 		b.add(Object_T.makeEmpty(bSize));
+		sampDist = sd;
 	}
 	
 	@Override
@@ -49,12 +51,12 @@ public class Survivor implements Heap {
 	
 	@Override
 	public void GC(Heap target) throws OutOfMemoryException, InvalidObjectException, InterruptedException {
-		GCSim.log("Commence garbage collection in "+this.toString()+".");
+		sampDist.log("Commence garbage collection in "+this.toString()+".");
 		Long m = 0L;
 		swap();		// sets the newly swept and copied-into side as the working side
 		m = stopAndCopy(target);
 		sweep();	// sweeps the non-working side
-		GCSim.log("Garbage collection in "+this.toString()+" complete, freed "+m+" words.");
+		sampDist.log("Garbage collection in "+this.toString()+" complete, freed "+m+" words.");
 	}
 	
 	private List<Object_T> working() { return current; }
