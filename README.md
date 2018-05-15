@@ -7,7 +7,7 @@
 5. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
 
 ## Simulating a virtual machine using generational tracing garbage collection.
-A high level implementation of a mark-sweep garbage collector (GC).
+A high level implementation of a mark-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to demonstrate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
 
 ## A high level overview of GC
 In computer science, garbage collection (GC) is a form of automatic memory management. The garbage collector, or just collector, attempts to reclaim garbage, or memory occupied by objects that are no longer in use by the program.
