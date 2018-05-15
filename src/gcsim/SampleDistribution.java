@@ -47,15 +47,15 @@ public class SampleDistribution implements Callable<HashMap<String, Double>> {
 			List<Duration> pauseTimes = vm.start();
 			Duration totalPause = Duration.ZERO;
 			for (Duration d : pauseTimes) {
-				System.out.println("["+this.toString()+"] Pause "+pauseTimes.indexOf(d)+": "+d.toMillis()+".");
+				System.out.println("["+this.toString()+": "+i+"] Pause "+pauseTimes.indexOf(d)+": "+d.toMillis()+".");
 				totalPause = totalPause.plus(d);
 			}
-			System.out.println("["+this.toString()+"] Total Pause Time: "+totalPause.toMillis()+".");
+			System.out.println("["+this.toString()+": "+i+"] Total Pause Time: "+totalPause.toMillis()+".");
 			Double mean = totalPause.toMillis()/(pauseTimes.size()*1.0d);
-			System.out.println("["+this.toString()+"] Average Pause Time: "+mean);
+			System.out.println("["+this.toString()+": "+i+"] Average Pause Time: "+mean);
 			Double variance = pauseTimes.stream().map(rvs -> Math.pow(((double)rvs.toMillis() - mean),2))
 					.reduce(Double::sum).map(sum -> Math.sqrt(sum/pauseTimes.size())).orElse(0d);
-			System.out.println("["+this.toString()+"] Variance of Pause Times: "+variance+".");
+			System.out.println("["+this.toString()+": "+i+"] Variance of Pause Times: "+variance+".");
 			HashMap<String, Double> simStats = new HashMap<>();
 			simStats.put("count", pauseTimes.size()*1.0);		// how many pauses
 			simStats.put("total", totalPause.toMillis()*1.0);	// total pause time
