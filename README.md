@@ -6,12 +6,11 @@
 4. [The probability model in GCSim.](https://github.com/orenwf/gcsim/blob/master/README.md#the-probability-model-and-mathematical-justification)
 5. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
 
-## A simulation of a virtual machine using generational tracing garbage collection.
-A high level implementation of a mark-sweep garbage collector.
+## Simulating a virtual machine using generational tracing garbage collection.
+A high level implementation of a mark-sweep garbage collector (GC).
 
 ## A high level overview of GC
 In computer science, garbage collection (GC) is a form of automatic memory management. The garbage collector, or just collector, attempts to reclaim garbage, or memory occupied by objects that are no longer in use by the program.
-![Image of Yaktocat] (https://javapapers.com/wp-content/uploads/2014/10/JVM-Architecture.jpg)
 
 ### Reference counting
 As a collection algorithm, reference counting tracks, for each object, a count of the number of references to it held by other objects. If an object's reference count reaches zero, the object has become inaccessible, and can be destroyed.
