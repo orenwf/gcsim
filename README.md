@@ -27,17 +27,17 @@ It is essential to understand the role of heap memory in JVM memory model. At ru
 
 ![HotspotMM](https://javapapers.com/wp-content/uploads/2014/10/Java-Heap-Memory.jpg)
 
-### Young Generation
+#### Young Generation
 
--Eden Space (any instance enters the runtime memory area through eden)
+- Eden Space (any instance enters the runtime memory area through eden)
 
-  -S0 Survivor Space (older instances moved from eden to S0)
+  - S0 Survivor Space (older instances moved from eden to S0)
 
-  -S1 Survivor Space (older instances moved from S0 to S1)
+  - S1 Survivor Space (older instances moved from S0 to S1)
 
-### Old Generation (instances promoted from S1 to tenured)
+#### Old Generation (instances promoted from S1 to tenured)
 
-### Permanent Generation (contains meta information like class, method detail)
+#### Permanent Generation (contains meta information like class, method detail)
 
 ## How our VM simulates GC
 A model of a stack based VM is created where the stack holds references to all objects ever allocated. A freeList of memory is maintained from which all allocations are made.
@@ -45,8 +45,8 @@ A model of a stack based VM is created where the stack holds references to all o
 The reachable objects are those which, starting from those on the stack, can be traced by following references. All unreachable objects are deemed garbage and are collected by the GC upon it's next invocation. Once an object is popped from the VM's stack it is unreachable and becomes garbage.
 
 The parameters of the VM that can be configured are:
--The threshold for GC invocation - The minimum number of objects needed to trigger a GC.
--The heap size - The number of blocks available to the VM for allocation initially.
+- The threshold for GC invocation - The minimum number of objects needed to trigger a GC.
+- The heap size - The number of blocks available to the VM for allocation initially.
 These parameters can be configured via the VM's constructor VM(threshold, heapSize). The VM supports interfaces to push and pop objects from the stack.
 
 ## The probability model and mathematical justification
