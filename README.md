@@ -7,7 +7,17 @@
 5. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
 
 ## A simulation of a virtual machine using generational tracing garbage collection.
+A high level implementation of a mark-sweep garbage collector.
 
+A model of a stack based VM is created where the stack holds references to all objects ever allocated. A freeList of memory is maintained from which all allocations are made.
+
+The parameters of the VM that can be configured are:
+
+The threshold for GC invocation - The minimum number of objects needed to trigger a GC.
+The heap size - The number of blocks available to the VM for allocation initially.
+These parameters can be configured via the VM's constructor VM(threshold, heapSize). The VM supports interfaces to push and pop objects from the stack.
+
+The reachable objects are those which, starting from those on the stack, can be traced by following references. All unreachable objects are deemed garbage and are collected by the GC upon it's next invocation. Once an object is popped from the VM's stack it is unreachable and becomes garbage.
 
 ### A high level overview of GC
 In computer science, garbage collection (GC) is a form of automatic memory management. The garbage collector, or just collector, attempts to reclaim garbage, or memory occupied by objects that are no longer in use by the program.
