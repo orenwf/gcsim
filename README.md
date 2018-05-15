@@ -10,14 +10,20 @@
 A high level implementation of a mark-sweep garbage collector.
 
 Java Heap Memory
+
 It is essential to understand the role of heap memory in JVM memory model. At runtime the Java instances are stored in the heap memory area. When an object is not referenced anymore it becomes eligible for eviction from heap memory. During garbage collection process, those objects are evicted from heap memory and the space is reclaimed. Heap memory has three major areas,
 ![Image of Yaktocat](https://javapapers.com/wp-content/uploads/2014/10/Java-Heap-Memory.jpg)
 
 Young Generation
+
 Eden Space (any instance enters the runtime memory area through eden)
+
 S0 Survivor Space (older instances moved from eden to S0)
+
 S1 Survivor Space (older instances moved from S0 to S1)
+
 Old Generation (instances promoted from S1 to tenured)
+
 Permanent Generation (contains meta information like class, method detail)
 
 A model of a stack based VM is created where the stack holds references to all objects ever allocated. A freeList of memory is maintained from which all allocations are made.
