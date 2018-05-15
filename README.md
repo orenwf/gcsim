@@ -21,6 +21,7 @@ The reachable objects are those which, starting from those on the stack, can be 
 
 ### A high level overview of GC
 In computer science, garbage collection (GC) is a form of automatic memory management. The garbage collector, or just collector, attempts to reclaim garbage, or memory occupied by objects that are no longer in use by the program.
+![Image of Yaktocat] http://incdn1.b0.upaiyun.com/2014/10/9209fe050d404cddffd0178d340c4094.jpg
 
 Reference counting
 As a collection algorithm, reference counting tracks, for each object, a count of the number of references to it held by other objects. If an object's reference count reaches zero, the object has become inaccessible, and can be destroyed.
