@@ -17,7 +17,6 @@ S0 Survivor Space (older instances moved from eden to S0)
 S1 Survivor Space (older instances moved from S0 to S1)
 Old Generation (instances promoted from S1 to tenured)
 Permanent Generation (contains meta information like class, method detail)
-![Image of Yaktocat](https://javapapers.com/wp-content/uploads/2014/10/Java-Heap-Memory.jpg)
 
 A model of a stack based VM is created where the stack holds references to all objects ever allocated. A freeList of memory is maintained from which all allocations are made.
 
