@@ -41,6 +41,7 @@ class Reference {
 ```
 
 ### The 'Stack'
+![the Stack](https://lh6.ggpht.com/-xB6OWqflcgg/UuJuswiUF5I/AAAAAAAAvY8/f-PZqi9O7L8/dun-briste-11%25255B6%25255D.jpg?imgmax=800)
 The stack is an ordered array of objects of fixed size, with newer objects at the top. In aggregate, the stack represents the entirety of the state of the currently executing program, in that it contains all of the roots of all reference graphs, which emanate from it. In a memory-managed programming language such as Java, the stack only holds references to other objects, which are allocated on the heap. Typically the stack is segmented into partitions called stack-frames which segregate access from one part of the stack to an other, but we will simulate this abstractly, not explicitly.
 
 ### The 'Heap'
