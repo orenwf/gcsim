@@ -19,10 +19,10 @@ In order to maintain a representation of the its state, a process will instruct 
 ### An Object
 An arbitrary aggregation of contiguous and non-contiguous memory whose value represents information relevant to the executing program. An example would be an integer, a string, or a reference to an other object. More complex objects can exist and contain other types of objects or contain references to other objects.
 ```
-class Object_T {
+class Object {
 
-    List<Reference> references;
-    Long size;
+    List<Reference> otherObjects;
+    Integer size;
     boolean marked;
     Integer age;
     ...
@@ -34,7 +34,7 @@ An object whose value is the address in logical memory of an other object. A ref
 ```
 class Reference {
 	
-	Object_T address;
+	Object addressOf;
     ...
 }
 
