@@ -225,8 +225,7 @@ We are 95% confidence that the value lies between: [47303, 47321]
 
 Variance total pause time: 4648.216254392646
 
-![computer memory](https://ibb.co/kNEFmJ)
-
+![picture](https://ibb.co/kNEFmJ)
 
 ## How to install and run GCSim:
 1. Have a computer with Java JDK version 1.8 or higher - download from: http://openjdk.java.net/install/
