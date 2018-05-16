@@ -156,65 +156,102 @@ These parameters can be configured via the VM's constructor VM(threshold, heapSi
 
 ## The probability model and mathematical justification
 
-What are we simulating?
+**What are we simulating?**
 
-We tested five models of diffenrent queue sizes and ran 100 simulations on each with 500 objects and calculated the expected total pause time for each. To reduce the variance of the expected total pause time we used control random variables across the sampling distributions,
+We tested five models of diffenrent heap sizes and ran 100 simulations on each with 500 objects and calculated the expected total pause time for each. To reduce the variance of the expected total pause time we used control random variables across the sampling distributions,
 
-We modeled 3 control random variables.
+**We modeled 3 control random variables.**
 
 1) Arrival of object --> poisson process 
+
 2)Lifetime of object --> uniform 
+
 3)Size of object --> uniform 
 
-The expected values for the 5 sampling distribution and conffidence intervals. 
+**The expected values for the 5 sampling distribution and conffidence intervals. **
 
 [4.0, 16.0, 80.0]
+
 Expected total pause time: 133133.43
+
 Expected variance of pause times: 2555.1638272832793
-Conffidence intervals: [133123, 133143]
+
+We are 95% confidence that the value lies between :[133123, 133143]
+
 Generation 0: 4.0
+
 Generation 1: 16.0
+
 Generation 2: 80.0
+
 Variance total pause time: 10432.078729816985
 
 
 [5.0, 25.0, 70.0]
+
 Expected total pause time: 133446.47
+
 Expected variance of pause times: 2347.1853611160595
-Conffidence intervals: [133438, 133455]
+
+We are 95% confidence that the value lies between : [133438, 133455]
+
 Generation 0: 5.0
+
 Generation 1: 25.0
+
 Generation 2: 70.0
+
 Variance total pause time: 15868.024475311979
 
 
 [6.0, 36.0, 58.0]
+
 Expected total pause time: 119636.82
+
 Expected variance of pause times: 1607.3163441431666
-Conffidence intervals: [119629, 119645]
+
+We are 95% confidence that the value lies between : [119629, 119645]
+
 Generation 0: 6.0
+
 Generation 1: 36.0
+
 Generation 2: 58.0
+
 Variance total pause time: 8111.29159798857
 
 
 [33.0, 33.0, 34.0]
+
 Expected total pause time: 53806.19
+
 Expected variance of pause times: 1779.5470772703225
-Conffidence intervals: [53798, 53815]
+
+We are 95% confidence that the value lies between: [53798, 53815]
+
 Generation 0: 33.0
+
 Generation 1: 33.0
+
 Generation 2: 34.0
+
 Variance total pause time: 5437.480684462245
 
 
 [50.0, 30.0, 20.0]
+
 Expected total pause time: 47312.18
+
 Expected variance of pause times: 2009.6598962015173
-Conffidence intervals: 47303, 47321]
+
+We are 95% confidence that the value lies between: 47303, 47321]
+
 Generation 0: 50.0
+
 Generation 1: 30.0
+
 Generation 2: 20.0
+
 Variance total pause time: 4648.216254392646
 
 
