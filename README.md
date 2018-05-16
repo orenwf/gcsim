@@ -81,6 +81,8 @@ Broadly, garbage collection (GC) is a form of automatic memory management. Garba
 
 There exist a small number of algorithms for performing garbage collection. An implementation of one of these algorithms is sometimes referred to as a "Garbage Collector". Generally, these implementations fall into two archetypes.
 
+![garbage](http://www.corvallisadvocate.com/wp-content/uploads/2013/01/Landfill-For-Interior.jpg)
+
 ### Reference counting
 A count of the number of references to each object held by other objects is tracked by the process. If an object's reference count reaches zero, the object has become inaccessible, and the memory that contains it can be used for other purposes. Reference counting algorithms have an advantage in that they do not cause pauses in execution or a process that are common in the other types of garbage collectors, such as the one detailed in the next paragraph. One notable disadvantage of this type of garbage collection is the possibility of circular references, by which an object maintains a reference to itself, while no other reference to it exists. Therefore the object's reference count can never reach zero, but no other object references it, so it cannot be directly accessed in order to fix the problem. Another disadvantage is that throughout execution, a process incurs a constant burden of keeping track of all objects' reference counts, and this can lead to worse performance, especially as the programs become very large and complex, with many small objects who hold many references and persist throghout the process. Our simulation does not implement this type of garbage collection.
 
