@@ -10,11 +10,7 @@
 ## Simulating tracing garbage collection in a Virtual Machine.
 This program simulates a high level implementation of a mark-and-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to answer questions about **how the duration and variance of pause times during garbage collection depend on the design of the garbage collection algorithm**, given some assumptions made about the distributions of frequency of object allocation in heap memory, object sizes, and object lifetimes. This simulation will produce results which could indicate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
 
-## An overview of GC
-Broadly, garbage collection (GC) is a form of automatic memory management. Garbage collection is performed by a procedure which attempts to reclaim memory occupied by objects that were once dynamically allocated (during program execution, rather than prior) from a finite pool of memory (the heap) reserved by the operating system for the executing program, but are no longer in use by the program.
-
-### Why manage memory?
-In order to maintain a representation of the its state, a process will instruct the machine running it to save it's state in memory. Since memory is a fixed resource, typically, when the state of the process no longer depends on any value saved in memory, that memory can and should be reclaimed in order to use it for a different purpose. This freeing operation may be explicitly specified in the process's code. However, due to the large and complex nature of modern software, it is unreliable in many cases to depend on the author of a program to manually manage the memory of a process. It is often more efficient and reliable to employ an automatic system which reclaims memory that is no longer in use.
+## An overview of a computer's memory model
 
 ### An Object
 An **arbitrarily sized** aggregation of contiguous and non-contiguous memory whose value **represents information** relevant to the executing program. An example would be an **integer, a string, or a reference to an other object**. More complex objects can exist and contain other types of objects or contain references to other objects.
@@ -56,6 +52,12 @@ Because you can't just put everything in the stack, the heap is an unordered col
 
 ### Allocation
 When the executing process needs to create an object that may or may not be just a reference, it asks the machine running it to reserve some amount of memory on the heap and then store and maintains information about the state of the heap after the event. When a new object is allocated on the heap, a reference may be placed on the stack which points to it.
+
+### Why manage memory?
+In order to maintain a representation of the its state, a process will instruct the machine running it to save it's state in memory. Since memory is a fixed resource, typically, when the state of the process no longer depends on any value saved in memory, that memory can and should be reclaimed in order to use it for a different purpose. This freeing operation may be explicitly specified in the process's code. However, due to the large and complex nature of modern software, it is unreliable in many cases to depend on the author of a program to manually manage the memory of a process. It is often more efficient and reliable to employ an automatic system which reclaims memory that is no longer in use.
+
+## An overview of Garbage Collection
+Broadly, garbage collection (GC) is a form of automatic memory management. Garbage collection is performed by a procedure which attempts to reclaim memory occupied by objects that were once dynamically allocated (during program execution, rather than prior) from a finite pool of memory (the heap) reserved by the operating system for the executing program, but are no longer in use by the program.
 
 ## Garbage Collection Paradigms
 
