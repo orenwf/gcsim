@@ -255,6 +255,8 @@ Generation 2: 20.0
 
 Variance total pause time: 4648.216254392646
 
+![reference-object-model]（https://pbs.twimg.com/media/DdV7fQcWsAEv1US.jpg）
+
 
 
 ## How to install and run GCSim:
