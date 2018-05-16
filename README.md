@@ -125,21 +125,18 @@ A number of strategies exist to manage the duration of pause times. These strate
 
 ![HotspotMM](https://2.bp.blogspot.com/-ZEyygkTuw-c/WlL5A_riU4I/AAAAAAAAVKw/R06IHQ-X_r481ldKR2KBsd8hVBGMBntVQCLcBGAs/s1600/Java%2BHeap.png)
 
-Generational heap garbage collection involved partitioning the heap into some number of mutually exclusive areas where objects can be stored. Objects are maintained in one of these generations between garbage collection events, and during a garbage collection may be transitioned into an other generation, based on the **age of the object**, or the total number of garbage collection events during which the object has been present in the heap.
+Generational heap garbage collection involved partitioning the heap into some number of mutually exclusive areas where objects can be stored. Objects are maintained in one of these generations between garbage collection events, and during a garbage collection may be transitioned into an other generation, based on the **age of the object**, or the total number of garbage collection events during which the object has been present in the heap. These transitions can be modeled by a directional graph, since objects begin in the "young" generation, and migrate over the course of process execution until reaching the "mature" generation.
 
-Partitioning the heap allows for differentiation between garbage collection events. Rather all garbage collections operating on the entire heap space (**major garbage collection**), a garbage collection event may only operate on some smaller fraction of the total heap, depending on how many generations are involved.
+Partitioning the heap allows for differentiation between garbage collection events. Rather than all garbage collections operating on the entire heap space (**major garbage collection**), a garbage collection event may only operate on some smaller fraction of the total heap, depending on how many generations are involved.
 
-#### Young Generation or Eden Generation
+#### Young Generation
+Objects are all initally allocated onto this space. Upon reaching an age that meets the requirement, the objects here will be copied to the Tenured generation. In the Java Virtual Machine, specifically, this generation is futher partitioned into smaller spaces for greater efficiency. Things like temporary variables, loop variables, and other short lived objects typically are allocated here and are collected before they migrate to the next generation.
 
-- Eden Space (any instance enters the runtime memory area through eden)
+#### Tenured Generation
+Objects reaching this generation have survievd at least one garbage collection, and are expected to survive for a longer duration.
 
-  - S0 Survivor Space (older instances moved from eden to S0)
-
-  - S1 Survivor Space (older instances moved from S0 to S1)
-
-#### Old Generation (instances promoted from S1 to tenured)
-
-#### Permanent Generation (contains meta information like class, method detail)
+#### Permanent or Mature Generation
+The oldest objects which have survived at least two garbage collections will become members of the permanent or mature generation. Objects that are allocated based on static library imports and language level allocations will also typically be contained here, since they are likely to be needed throughout the process, and their memory will not be available for freeing.
 
 ## How our VM simulates GC
 A model of a stack based VM is created where the stack holds references to all objects ever allocated. A freeList of memory is maintained from which all allocations are made.
