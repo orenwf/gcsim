@@ -7,7 +7,7 @@
 5. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
 6. [References to references](https://github.com/orenwf/gcsim/blob/master/README.md#further-reading-and-useful-links)
 
-## Simulating a virtual machine using generational tracing garbage collection.
+## Simulating tracing garbage collection in a Virtual Machine.
 This program simulates a high level implementation of a mark-and-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to answer questions about **how the duration and variance of pause times during garbage collection depend on the design of the garbage collection algorithm**, given some assumptions made about the distributions of frequency of object allocation in heap memory, object sizes, and object lifetimes. This simulation will produce results which could indicate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
 
 ## An overview of GC
@@ -28,6 +28,8 @@ class Object {
     ...
  }
 ```
+
+![reference-object-model](https://i.stack.imgur.com/i6k0Z.png)
 
 ### A Reference
 An **object whose value is the address in logical memory of an other object**. A reference may also carry with it other types of information, such as 'metadata'. A directed graph of references pointing to objects (sometimes containing other references) is typically referred to as a reference graph or tree.
