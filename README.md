@@ -146,7 +146,7 @@ The oldest objects which have survived at least two garbage collections will bec
   - `lifetime` of the object's `stack` `Reference`
   - `size` of the object and maximum number of references to other objects in the stack, if any exist.
 
-- The virtual machine is intialized with a copy of the entire set of `3 * X` random variables, and a clock time set to `0`
+- The virtual machine is intialized with a copy of the entire set of `3 * N` random variables, and a clock time set to `0`
 - The virtual machine checks the `arrival` time in the first triple
 - If the `arrival` time is greater than the current clock time, the `allocate(Object)` function is called
 - The `allocate(object)` function attempts to allocate the object on the `Young` generation.
@@ -160,6 +160,10 @@ void GC(Heap target) {
     sweep();
 }
 ```
+- The `promote(target)` function calls the private allocator of the `Tenured` generation.
+  - if there is space, the objects are transitioned from the `Young` generation to the `Tenured` generation
+  - if there is not space, a garbage collection is triggered on the `Tenured` generation
+  - `promote(target)` with `target = Mature` generation
 
 ## The probability model of GCSim
 
