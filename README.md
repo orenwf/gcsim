@@ -14,7 +14,7 @@ This program simulates a high level implementation of a mark-and-sweep garbage c
 ## An overview of a computer's memory model
 Computers based on the Von Neumann model are designed with persistent random access memory laid out in addressable associative arrays, or tables. While this can be abstracted away from direct connection with physical locations, the logical model of memory is organized thusly. When a process is executed by the operating system or virtual machine running on computer hardware, it reserves some portion of the machine's available resources for the process. The memory space of an executing process is typically divided into *code memory* where the static pre-compiled instruction set for the process is kept on hand, and *dynamic memory* which is used by the executing process to save results of computation.
 
-![computer memory](https://www.dyclassroom.com/image/topic/c/pointers-string/cityptr-mem.jpg)
+![computer memory](https://i.stack.imgur.com/bQWgo.png)
 
 ### An Object
 An **arbitrarily sized** aggregation of contiguous and non-contiguous memory whose value **represents information** relevant to the executing program. An example would be an **integer, a string, or a reference to an other object**. More complex objects can exist and contain other types of objects or contain references to other objects.
