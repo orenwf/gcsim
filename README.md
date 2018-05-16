@@ -139,7 +139,13 @@ Objects are not initially allocated to this generation. Objects reaching this ge
 The oldest objects which have survived at least two garbage collections will become members of the permanent or mature generation. Objects that are allocated based on static library imports and language level allocations will also typically be contained here, since they are likely to be needed throughout the process, and their memory will not be available for freeing. Since this generation is the final one, and there are no futher migrations possible, this generation performs **compaction** along with garbage collection.
 
 ### How our VM simulates GC
-An abstract model of a stack based VM is created where the a pool of references to all objects ever allocated. The stack in this simulation is abstracted away, and instead of a 
+- Parameters:
+  - The number of objects to be simulated, `o`.
+  - The generation size configuration, `x`, `y`, `z`.
+- Our simulation generates `o` triples of: 
+  - `long` arrival time
+  - `long` lifetime of the object's stack reference
+  - `long` size of the object and maximum number of references to other objects in the stack, if any exist.
 
 The reachable objects are those which, starting from those on the stack, can be traced by following references. All unreachable objects are deemed garbage and are collected by the GC upon it's next invocation. Once an object is popped from the VM's stack it is unreachable and becomes garbage.
 
