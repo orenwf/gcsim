@@ -118,10 +118,9 @@ int pauseTime(func trace(heap), func sweep(heap)) {
    return time(trace(heap)) + time(sweep(heap));
 }
 ```
+### Generational Tracing GC and our Simulation
 
 A number of strategies exist to manage the duration of pause times. These strategies essentially fall into two sets. One set tries to reduce the overall size of the heap space that is being garbage collected at any one time, by partitioning the heap space into smaller spaces and managing them separately. The other set use complex applications of concurrent programming in order to collect garbage during program execution, without any explicit pausing. Our simulation considers partitioning heaps into multiple parts, and collecting garbage only in sequential execution of the process. Specifically, we consider a strategy called Generational Tracing GC.
-
-### Generational Tracing GC and our Simulation
 
 ![HotspotMM](https://2.bp.blogspot.com/-ZEyygkTuw-c/WlL5A_riU4I/AAAAAAAAVKw/R06IHQ-X_r481ldKR2KBsd8hVBGMBntVQCLcBGAs/s1600/Java%2BHeap.png)
 
