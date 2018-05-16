@@ -84,11 +84,11 @@ These parameters can be configured via the VM's constructor VM(threshold, heapSi
 6. View the results of the simulation in the terminal output, or in the generated text file.
 
 ## Further reading and useful links
-https://blogs.msdn.microsoft.com/ericlippert/2009/04/27/the-stack-is-an-implementation-detail-part-one/
-https://simpy.readthedocs.io/en/latest/
-https://github.com/Deborah-Digges/mark-sweep-simulation
-https://github.com/tylertreat/comcast
-https://blogs.msdn.microsoft.com/oldnewthing/20100809-00/?p=13203
-http://fileadmin.cs.lth.se/cs/Personal/Sven_Gestegard_Robertz/publ/gcsimul.pdf
-http://www.cs.williams.edu/~dbarowy/cs334s18/assets/p87-zorn.pdf
-https://blogs.msdn.microsoft.com/abhinaba/2009/01/25/back-to-basic-series-on-dynamic-memory-management/
+- https://blogs.msdn.microsoft.com/ericlippert/2009/04/27/the-stack-is-an-implementation-detail-part-one/
+- https://simpy.readthedocs.io/en/latest/
+- https://github.com/Deborah-Digges/mark-sweep-simulation
+- https://github.com/tylertreat/comcast
+- https://blogs.msdn.microsoft.com/oldnewthing/20100809-00/?p=13203
+- http://fileadmin.cs.lth.se/cs/Personal/Sven_Gestegard_Robertz/publ/gcsimul.pdf
+- http://www.cs.williams.edu/~dbarowy/cs334s18/assets/p87-zorn.pdf
+- https://blogs.msdn.microsoft.com/abhinaba/2009/01/25/back-to-basic-series-on-dynamic-memory-management/
