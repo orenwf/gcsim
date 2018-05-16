@@ -225,7 +225,7 @@ We are 95% confidence that the value lies between: [47303, 47321]
 
 Variance total pause time: 4648.216254392646
 
-![computer memory](https://i.stack.imgur.com/nlb7A.jpg)
+![computer memory](https://ibb.co/kNEFmJ)
 
 
 ## How to install and run GCSim:
