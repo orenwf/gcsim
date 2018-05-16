@@ -21,8 +21,8 @@ An arbitrary aggregation of contiguous and non-contiguous memory whose value rep
 ```
 struct Object {
     int x;
-    void *some_object;
-    void *some_other;
+    struct Object thing;
+    struct Object * reference;
 };
 ```
 
