@@ -123,7 +123,7 @@ A number of strategies exist to manage the duration of pause times. These strate
 
 ### Generational Tracing GC
 
-![HotspotMM](https://javapapers.com/wp-content/uploads/2014/10/Java-Heap-Memory.jpg)
+![HotspotMM](https://2.bp.blogspot.com/-ZEyygkTuw-c/WlL5A_riU4I/AAAAAAAAVKw/R06IHQ-X_r481ldKR2KBsd8hVBGMBntVQCLcBGAs/s1600/Java%2BHeap.png)
 
 #### Young Generation
 
