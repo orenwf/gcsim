@@ -45,17 +45,17 @@ class Reference {
 ### The 'Stack'
 ![the Stack](https://i.pinimg.com/originals/7e/09/6f/7e096ff379d91080e637483214f4a230.jpg)
 
-The stack is an ordered array of objects of fixed size, with newer objects at the top. In aggregate, the stack represents the entirety of the state of the currently executing program, in that it contains all of the roots of all reference graphs, which emanate from it. In a memory-managed programming language such as Java, the stack only holds references to other objects, which are allocated on the heap. Typically the stack is segmented into partitions called stack-frames which segregate access from one part of the stack to an other, but we will simulate this abstractly, not explicitly.
+The stack is the section of a process' dynamic memory organized as an ordered array of **objects of fixed size**, with newer objects at the top. In aggregate, the stack represents the entirety of the state of the currently executing program, in that it contains all of the roots of all reference graphs, which emanate from it. Typically the stack is segmented into partitions called stack-frames which segregate access from one part of the stack to an other, and are allocated and deallocated based on the flow control of the process. Objects on the topmost frame of the stack will be automatically removed as the stack grows and shrinks deterministically based on the state of the process (such as returning from a function call). We will simulate this abstractly, not explicitly. **In a memory-managed programming language such as Java, the stack only holds references to other objects, which are allocated on the heap.**
 
 ### The 'Heap'
 ![the Heap](https://guidetoiceland.is/image/319166/x/0/the-old-tradition-of-creating-stone-cairns-in-iceland-please-don-t-stack-any-more-new-stone-piles-7.jpg)
 
-Because you can't just put everything in the stack, the heap is an unordered collection of objects of varying sizes. When a process executes, the machine running it allocates some fixed amount of virtual memory to it. After space for the code memory, static allocations and stack are taken into account, the balance of the space (usually the bulk of it) is devoted to the heap. Objects which are not statically allocated by code, whose size are not known prior to execution, and which must be stored for longer duration than the currently executing stack frame are allocated during execution are stored on the heap.
+Because you can't just put everything in the stack, the heap is an unordered collection of **objects of varying sizes**. When a process executes, the machine running it allocates some fixed amount of virtual memory to it. After space for the code memory, static allocations and stack are taken into account, the balance of the space (usually the bulk of it) is devoted to the heap. Objects which are not statically allocated by code, whose size are not known prior to execution, and which must be stored for longer duration than the currently executing stack frame are allocated during execution are stored on the heap.
 
 ![reference graph](https://i.stack.imgur.com/yZK6t.png)
 
 ### Allocation
-When the executing process needs to create an object that may or may not be just a reference, it asks the machine running it to reserve some amount of memory on the heap and then store and maintains information about the state of the heap after the event. When a new object is allocated on the heap, a reference may be placed on the stack which points to it.
+When the executing process needs to create an object that may or may not be just a reference, or whose size is not known from the static code, it asks the machine running it to reserve some amount of memory on the heap and then store and maintains information about the state of the heap after the event. When a new object is allocated on the heap, a reference may be placed on the stack which points to it.
 ```
 Reference allocate(Object_T obj) {
     ...
@@ -67,6 +67,7 @@ Reference allocate(Object_T obj) {
     else throw new OutOfMemoryException(this);
 }
 ```
+This object will continue to exist in heap dynamic memory independent of the state of execution of the process, unless it is explicitly removed.
 
 ### Why manage memory?
 ![badprogramming](https://evergreensmallbusiness.com/wp-content/uploads/2014/10/iStock_000044333992Mediumsystemerror.jpg)
