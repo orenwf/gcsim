@@ -11,7 +11,7 @@
 ## Simulating tracing garbage collection in a Virtual Machine.
 This program simulates a high level implementation of a mark-and-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to answer questions about **how the duration and variance of pause times during garbage collection depend on the design of the garbage collection algorithm**, given some assumptions made about the distributions of frequency of object allocation in heap memory, object sizes, and object lifetimes. This simulation will produce results which could indicate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
 
-This research project is part of the work being done in the completion of Prof. Felisa J. Vázquez-Abad's **Introduction to Stochastic Processes and Computer Simulation** course at the *City University of New York: Hunter College*, in Spring, 2018.
+[This research project is part of the work being done in the completion of Prof. Felisa J. Vázquez-Abad's **Introduction to Stochastic Processes and Computer Simulation** course at the *City University of New York: Hunter College*, in Spring, 2018.](http://www.cs.hunter.cuny.edu/~felisav/StochasticProcesses/Course_Description.html)
 
 
 ## An overview of a computer's memory model
