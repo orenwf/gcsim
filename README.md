@@ -106,20 +106,20 @@ void traverseRootSet(Stack stk) {
 ```
 Sweeping the heap.
 ```
-void sweep(heap) {
-    for (object o : heap)
+void sweep(Heap h) {
+    for (object o : h) 
         if (!o.marked()) free(o.memory());
 }
 ```
 Tracing GC does not incur the overhead of keeping track of reference counts for each object in existence, and avoids the bugs possible from circular references. However, the mark and sweep phase causes a pause in the execution of the program, that is linear in proportion to the size of the heap plus the number of objects to be traversed in the reference graph.
 
 ```
-int pauseTime(trace(heap), sweep(heap)) {
+int pauseTime(func trace(heap), func sweep(heap)) {
    return time(trace(heap)) + time(sweep(heap));
 }
 ```
 
-A number of strategies exist to manage the duration of pause times. Our simulation considers one specific strategy called Generational Tracing GC.
+A number of strategies exist to manage the duration of pause times. These strategies essentially fall into two sets. One set tries to reduce the overall size of the heap space that is being garbage collected at any one time, by partitioning the heap space into smaller spaces and managing them separately. The other set use complex applications of concurrent programming in order to collect garbage during program execution, without any explicit pausing. Our simulation considers partitioning heaps into multiple parts, and collecting garbage only in sequential execution of the process. Specifically, we consider a strategy called Generational Tracing GC.
 
 ### Generational Tracing GC
 
