@@ -56,6 +56,17 @@ Because you can't just put everything in the stack, the heap is an unordered col
 
 ### Allocation
 When the executing process needs to create an object that may or may not be just a reference, it asks the machine running it to reserve some amount of memory on the heap and then store and maintains information about the state of the heap after the event. When a new object is allocated on the heap, a reference may be placed on the stack which points to it.
+```
+Reference allocate(Object_T obj) {
+    ...
+    if (free.size() >= obj.size()) {
+        memory.add(obj);
+	free.subtract(obj.size());
+	return Reference.init(obj);
+    }	
+    else throw new OutOfMemoryException(this);
+}
+```
 
 ### Why manage memory?
 ![badprogramming](https://evergreensmallbusiness.com/wp-content/uploads/2014/10/iStock_000044333992Mediumsystemerror.jpg)
