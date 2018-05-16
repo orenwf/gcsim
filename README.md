@@ -58,6 +58,8 @@ Because you can't just put everything in the stack, the heap is an unordered col
 When the executing process needs to create an object that may or may not be just a reference, it asks the machine running it to reserve some amount of memory on the heap and then store and maintains information about the state of the heap after the event. When a new object is allocated on the heap, a reference may be placed on the stack which points to it.
 
 ### Why manage memory?
+![badprogramming](https://evergreensmallbusiness.com/wp-content/uploads/2014/10/iStock_000044333992Mediumsystemerror.jpg)
+
 In order to maintain a representation of the its state, a process will instruct the machine running it to save it's state in memory. Since memory is a fixed resource, typically, when the state of the process no longer depends on any value saved in memory, that memory can and should be reclaimed in order to use it for a different purpose. This freeing operation may be explicitly specified in the process's code. However, due to the large and complex nature of modern software, it is unreliable in many cases to depend on the author of a program to manually manage the memory of a process. It is often more efficient and reliable to employ an automatic system which reclaims memory that is no longer in use.
 
 ## An overview of Garbage Collection
