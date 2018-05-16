@@ -17,7 +17,7 @@ Broadly, garbage collection (GC) is a form of automatic memory management. Garba
 In order to maintain a representation of the its state, a process will instruct the machine running it to save it's state in memory. Since memory is a fixed resource, typically, when the state of the process no longer depends on any value saved in memory, that memory can and should be reclaimed in order to use it for a different purpose. This freeing operation may be explicitly specified in the process's code. However, due to the large and complex nature of modern software, it is unreliable in many cases to depend on the author of a program to manually manage the memory of a process. It is often more efficient and reliable to employ an automatic system which reclaims memory that is no longer in use.
 
 ### An Object
-An arbitrary aggregation of contiguous and non-contiguous memory whose value represents information relevant to the executing program. An example would be an integer, a string, or a reference to an other object. More complex objects can exist and contain other types of objects or contain references to other objects.
+An **arbitrarily sized** aggregation of contiguous and non-contiguous memory whose value **represents information** relevant to the executing program. An example would be an **integer, a string, or a reference to an other object**. More complex objects can exist and contain other types of objects or contain references to other objects.
 ```
 class Object {
 
@@ -30,7 +30,7 @@ class Object {
 ```
 
 ### A Reference
-An object whose value is the address in logical memory of an other object. A reference may also carry with it other types of information, such as 'metadata'. A directed graph of references pointing to objects (sometimes containing other references) is typically referred to as a reference graph or tree.
+An **object whose value is the address in logical memory of an other object**. A reference may also carry with it other types of information, such as 'metadata'. A directed graph of references pointing to objects (sometimes containing other references) is typically referred to as a reference graph or tree.
 ```
 class Reference {
 	
