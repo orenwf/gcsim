@@ -173,6 +173,8 @@ void GC(Heap target) {
 - After all garbage collection is finished, the `resume(Clock)` function is called.
 - The balance of time `resume(Clock) - pause(Clock)` is then recorded in the log, and also added to all valid lifetimes.
 
+- The simulation continues until all `X` allocations are complete.
+
 ## The probability model of GCSim
 
 ### What are we simulating?
