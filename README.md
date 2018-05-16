@@ -140,37 +140,44 @@ The oldest objects which have survived at least two garbage collections will bec
 
 ### How our VM simulates GC
 - Parameters:
-  - The number of objects to be simulated, `o`.
+  - The number of objects to be simulated, `N`.
   - The generation size configuration, `x`, `y`, `z`.
-- Our simulation generates `o` triples of: 
-  - `long` arrival time
-  - `long` lifetime of the object's stack reference
-  - `long` size of the object and maximum number of references to other objects in the stack, if any exist.
+- Our simulation generates `N` triples of: 
+  - `arrival` time
+  - `lifetime` of the object's `stack` `Reference`
+  - `size` of the object and maximum number of references to other objects in the stack, if any exist.
 
-The reachable objects are those which, starting from those on the stack, can be traced by following references. All unreachable objects are deemed garbage and are collected by the GC upon it's next invocation. Once an object is popped from the VM's stack it is unreachable and becomes garbage.
+- The virtual machine is intialized with a copy of the entire set of `3 * X` random variables, and a clock time set to `0`
+- The virtual machine checks the `arrival` time in the first triple
+- If the `arrival` time is greater than the current clock time, the `allocate(Object)` function is called
+- The `allocate(object)` function attempts to allocate the object on the `Young` generation.
+  - if there is space, the allocation is successful, and a `Reference` is returned to the VM and placed in the `stack`
+  - if there is no space, a garbage collection is triggered on the `Young` heap
+  
+```
+void GC(Heap target) {
+    for (Object o : Young) 
+        if (o.isMarked()) (promote(target);
+    sweep();
+}
+```
 
-The parameters of the VM that can be configured are:
-- The threshold for GC invocation - The minimum number of objects needed to trigger a GC.
-- The heap size - The number of blocks available to the VM for allocation initially.
-These parameters can be configured via the VM's constructor VM(threshold, heapSize). The VM supports interfaces to push and pop objects from the stack.
+## The probability model of GCSim
 
-## The probability model and mathematical justification
-
-**What are we simulating?**
-
+### What are we simulating?
 We tested five models of diffenrent heap sizes and ran 100 simulations on each with 500 objects and calculated the expected total pause time for each. To reduce the variance of the expected total pause time we used control random variables across the sampling distributions,
 
 ### Variance Reduction Technique
 **We modeled 3 control random variables.**
 
-1) Arrival of object --> poisson process 
+1. Arrival of object --> poisson process 
 
-2) Lifetime of object --> uniform 
+2. Lifetime of object --> uniform 
 
-3) Size of object --> uniform 
+3. Size of object --> uniform 
+
 
 **The expected values for the 5 sampling distribution, conffidence intervals and some other statistics**
-
 
 **[4.0, 16.0, 80.0]**
 
