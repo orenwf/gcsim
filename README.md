@@ -34,7 +34,7 @@ An object whose value is the address in logical memory of an other object. A ref
 ```
 class Reference {
 	
-	private Object_T address;
+	Object_T address;
     ...
 }
 
