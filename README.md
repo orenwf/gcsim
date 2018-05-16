@@ -44,6 +44,7 @@ class Reference {
 The stack is an ordered array of objects of fixed size, with newer objects at the top. In aggregate, the stack represents the entirety of the state of the currently executing program, in that it contains all of the roots of all reference graphs, which emanate from it. In a memory-managed programming language such as Java, the stack only holds references to other objects, which are allocated on the heap. Typically the stack is segmented into partitions called stack-frames which segregate access from one part of the stack to an other, but we will simulate this abstractly, not explicitly.
 
 ### The 'Heap'
+![the Heap](https://i.imgur.com/8Cu7GWS.jpg)
 Because you can't just put everything in the stack, the heap is an unordered collection of objects of varying sizes. When a process executes, the machine running it allocates some fixed amount of virtual memory to it. After space for the code memory, static allocations and stack are taken into account, the balance of the space (usually the bulk of it) is devoted to the heap. Objects which are not statically allocated by code, whose size are not known prior to execution, and which must be stored for longer duration than the currently executing stack frame are allocated during execution are stored on the heap.
 
 ### Allocation
