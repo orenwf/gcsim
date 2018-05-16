@@ -117,3 +117,4 @@ These parameters can be configured via the VM's constructor VM(threshold, heapSi
 - http://fileadmin.cs.lth.se/cs/Personal/Sven_Gestegard_Robertz/publ/gcsimul.pdf
 - http://www.cs.williams.edu/~dbarowy/cs334s18/assets/p87-zorn.pdf
 - https://blogs.msdn.microsoft.com/abhinaba/2009/01/25/back-to-basic-series-on-dynamic-memory-management/
+- http://www.kdgregory.com/index.php?page=java.refobj
