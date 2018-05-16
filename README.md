@@ -144,16 +144,16 @@ The oldest objects which have survived at least two garbage collections will bec
   - The number of objects to be simulated, `N`.
   - The generation size configuration, `x`, `y`, `z`.
 - Our simulation generates `N` triples of: 
-  - `arrival` time
-  - `lifetime` of the object's `stack` `Reference`
-  - `size` of the object and maximum number of references to other objects in the stack, if any exist.
+  - `Arrival` time
+  - `Lifetime` of the object's `stack` `Reference`
+  - `Size` of the object and maximum number of references to other objects in the stack, if any exist.
 
-- The virtual machine is intialized with a copy of the entire set of `3 * N` random variables, and a clock time set to `0`
+- The virtual machine is intialized with a copy of the entire set of `3 * N` random variables, and a `Clock` time set to `0`
 - The virtual machine checks the `arrival` time in the first triple
 - If the `arrival` time is greater than the current clock time, the `allocate(Object)` function is called
 - The `allocate(object)` function attempts to allocate the object on the `Young` generation.
   - if there is space, the allocation is successful, and a `Reference` is returned to the VM and placed in the `stack`
-  - if there is no space, a garbage collection is triggered on the `Young` heap
+  - if there is no space, `pause(Clock)` is called, and a garbage collection is triggered on the `Young` heap
   
 ```
 void GC(Heap target) {
@@ -166,6 +166,12 @@ void GC(Heap target) {
   - if there is space, the objects are transitioned from the `Young` generation to the `Tenured` generation
   - if there is not space, a garbage collection is triggered on the `Tenured` generation
   - `promote(target)` with `target = Mature` generation
+  
+- If there is not sufficient space in the `Mature` generation, the `compact(Mature)` is called.
+  - `compact` is a major garbage collection event where all valid objects are shifted to reduce internal fragmentation
+
+- After all garbage collection is finished, the `resume(Clock)` function is called.
+- The balance of time `resume(Clock) - pause(Clock)` is then recorded in the log, and also added to all valid lifetimes.
 
 ## The probability model of GCSim
 
@@ -175,11 +181,11 @@ We tested five models of diffenrent heap sizes and ran 100 simulations on each w
 ### Variance Reduction Technique
 **We modeled 3 control random variables.**
 
-1. Arrival of object --> poisson process 
+1. `Arrival` of object --> uniform
 
-2. Lifetime of object --> uniform 
+2. `Lifetime` of object --> uniform 
 
-3. Size of object --> uniform 
+3. `Size` of object --> uniform 
 
 
 **The expected values for the 5 sampling distribution, conffidence intervals and some other statistics**
