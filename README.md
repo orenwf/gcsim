@@ -5,7 +5,7 @@
 3. [How GCSim works.](https://github.com/orenwf/gcsim/blob/master/README.md#how-our-vm-simulates-gc)
 4. [The probability model in GCSim.](https://github.com/orenwf/gcsim/blob/master/README.md#the-probability-model-and-mathematical-justification)
 5. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
-6. [References to references] ()
+6. [References to references] (https://github.com/orenwf/gcsim/blob/master/README.md#further-reading-and-useful-links)
 
 ## Simulating a virtual machine using generational tracing garbage collection.
 This program simulates a high level implementation of a mark-and-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to answer questions about how the duration and variance of pause times during garbage collection in an executing process depend on the design of the garbage collection algorithm, given some assumptions made about the distributions of frequency of object allocation in heap memory, object sizes, and object lifetimes. This simulation will produce results which could indicate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
