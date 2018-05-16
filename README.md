@@ -125,7 +125,11 @@ A number of strategies exist to manage the duration of pause times. These strate
 
 ![HotspotMM](https://2.bp.blogspot.com/-ZEyygkTuw-c/WlL5A_riU4I/AAAAAAAAVKw/R06IHQ-X_r481ldKR2KBsd8hVBGMBntVQCLcBGAs/s1600/Java%2BHeap.png)
 
-#### Young Generation
+Generational heap garbage collection involved partitioning the heap into some number of mutually exclusive areas where objects can be stored. Objects are maintained in one of these generations between garbage collection events, and during a garbage collection may be transitioned into an other generation, based on the **age of the object**, or the total number of garbage collection events during which the object has been present in the heap.
+
+Partitioning the heap allows for differentiation between garbage collection events. Rather all garbage collections operating on the entire heap space (**major garbage collection**), a garbage collection event may only operate on some smaller fraction of the total heap, depending on how many generations are involved.
+
+#### Young Generation or Eden Generation
 
 - Eden Space (any instance enters the runtime memory area through eden)
 
