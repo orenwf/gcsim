@@ -189,8 +189,15 @@ We tested five models of diffenrent heap sizes and ran 100 simulations on each w
 
 3. `Size` of object --> uniform 
 
+This set of `X` random variables is used in any experiment on all the different sample distributions. This effectively controls variance of this simulation amont the various sample distributions.
 
-**The expected values for the 5 sampling distribution, conffidence intervals and some other statistics**
+## Example of Results
+
+### The expected values for the 5 sampling distribution, confidence intervals and some other statistics
+500 Objects
+100 Simulations
+**GCSim runs each of the sample distributions concurrently**
+Total Expected Runtime for each simulation is **451.6** seconds
 
 **[4.0, 16.0, 80.0]**
 
@@ -198,7 +205,7 @@ Expected total pause time: 133133.43
 
 Expected variance of pause times: 2555.1638272832793
 
-We are 95% confidence that the value lies between :[133123, 133143]
+We are 95% confident that the value lies between :[133123, 133143]
 
 Variance total pause time: 10432.078729816985
 
@@ -209,7 +216,7 @@ Expected total pause time: 133446.47
 
 Expected variance of pause times: 2347.1853611160595
 
-We are 95% confidence that the value lies between : [133438, 133455]
+We are 95% confident that the value lies between : [133438, 133455]
 
 Variance total pause time: 15868.024475311979
 
@@ -220,7 +227,7 @@ Expected total pause time: 119636.82
 
 Expected variance of pause times: 1607.3163441431666
 
-We are 95% confidence that the value lies between : [119629, 119645]
+We are 95% confident that the value lies between : [119629, 119645]
 
 Variance total pause time: 8111.29159798857
 
@@ -231,7 +238,7 @@ Expected total pause time: 53806.19
 
 Expected variance of pause times: 1779.5470772703225
 
-We are 95% confidence that the value lies between: [53798, 53815]
+We are 95% confident that the value lies between: [53798, 53815]
 
 Variance total pause time: 5437.480684462245
 
@@ -242,7 +249,7 @@ Expected total pause time: 47312.18
 
 Expected variance of pause times: 2009.6598962015173
 
-We are 95% confidence that the value lies between: [47303, 47321]
+We are 95% confident that the value lies between: [47303, 47321]
 
 Variance total pause time: 4648.216254392646
 
