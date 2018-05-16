@@ -104,7 +104,21 @@ void traverseRootSet(Stack stk) {
     for (Reference r : stk) trace(r);
 }
 ```
-Tracing GC does not incur the overhead of keeping track of reference counts for each object in existence, and avoids the bugs possible from circular references. However, the mark and sweep phase causes a pause in the execution of the program, that is linear in proportion to the size of the heap.
+Sweeping the heap.
+```
+void sweep(heap) {
+    for (object o : heap)
+        if (!o.marked()) free(o.memory());
+}
+```
+Tracing GC does not incur the overhead of keeping track of reference counts for each object in existence, and avoids the bugs possible from circular references. However, the mark and sweep phase causes a pause in the execution of the program, that is linear in proportion to the size of the heap plus the number of objects to be traversed in the reference graph.
+
+```
+int pauseTime(trace(heap), sweep(heap)) {
+   return time(trace(heap)) + time(sweep(heap));
+}
+```
+
 A number of strategies exist to manage the duration of pause times. Our simulation considers one specific strategy called Generational Tracing GC.
 
 ### Generational Tracing GC
