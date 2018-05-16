@@ -19,11 +19,14 @@ In order to maintain a representation of the its state, a process will instruct 
 ### An Object
 An arbitrary aggregation of contiguous and non-contiguous memory whose value represents information relevant to the executing program. An example would be an integer, a string, or a reference to an other object. More complex objects can exist and contain other types of objects or contain references to other objects.
 ```
-struct Object {
-    int x;
-    struct Object thing;
-    struct Object * reference;
-};
+class Object_T {
+
+	private List<Reference> references;
+	private Long size;
+	private boolean marked;
+	private Integer age;
+    ...
+ }
 ```
 
 ### A Reference
