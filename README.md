@@ -5,8 +5,9 @@
 2. [What is garbage collection?](https://github.com/orenwf/gcsim/blob/master/README.md#an-overview-of-garbage-collection)
 3. [How GCSim works.](https://github.com/orenwf/gcsim/blob/master/README.md#how-our-vm-simulates-gc)
 4. [The probability model in GCSim.](https://github.com/orenwf/gcsim/blob/master/README.md#the-probability-model-and-mathematical-justification)
-5. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
-6. [References to references](https://github.com/orenwf/gcsim/blob/master/README.md#further-reading-and-useful-links)
+5. [Example Results](https://github.com/orenwf/gcsim#example-of-results)
+6. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
+7. [References to references](https://github.com/orenwf/gcsim/blob/master/README.md#further-reading-and-useful-links)
 
 ## Simulating tracing garbage collection in a Virtual Machine.
 This program simulates a high level implementation of a mark-and-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to answer questions about **how the duration and variance of pause times during garbage collection depend on the design of the garbage collection algorithm**, given some assumptions made about the distributions of frequency of object allocation in heap memory, object sizes, and object lifetimes. This simulation will produce results which could indicate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
@@ -191,6 +192,8 @@ We tested five models of diffenrent heap sizes and ran 100 simulations on each w
 
 This set of `X` random variables is used in any experiment on all the different sample distributions. This effectively controls variance of this simulation amont the various sample distributions.
 
+![picture](https://image.ibb.co/gFKRty/2018_05_16_15_39_07_1.jpg)
+
 ## Example of Results
 
 ### The expected values for the 5 sampling distribution, confidence intervals and some other statistics
@@ -253,7 +256,6 @@ We are 95% confident that the value lies between: [47303, 47321]
 
 Variance total pause time: 4648.216254392646
 
-![picture](https://image.ibb.co/gFKRty/2018_05_16_15_39_07_1.jpg)
 
 ## How to install and run GCSim:
 1. Have a computer with Java JDK version 1.8 or higher - download from: http://openjdk.java.net/install/
