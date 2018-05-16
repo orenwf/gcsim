@@ -50,7 +50,7 @@ The stack is an ordered array of objects of fixed size, with newer objects at th
 
 Because you can't just put everything in the stack, the heap is an unordered collection of objects of varying sizes. When a process executes, the machine running it allocates some fixed amount of virtual memory to it. After space for the code memory, static allocations and stack are taken into account, the balance of the space (usually the bulk of it) is devoted to the heap. Objects which are not statically allocated by code, whose size are not known prior to execution, and which must be stored for longer duration than the currently executing stack frame are allocated during execution are stored on the heap.
 
-![reference graph](http://www.kdgregory.com/images/java.refobj/stack_and_heap.gif)
+![reference graph](https://i.stack.imgur.com/yZK6t.png)
 
 ### Allocation
 When the executing process needs to create an object that may or may not be just a reference, it asks the machine running it to reserve some amount of memory on the heap and then store and maintains information about the state of the heap after the event. When a new object is allocated on the heap, a reference may be placed on the stack which points to it.
