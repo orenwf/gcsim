@@ -87,6 +87,21 @@ A count of the number of references to each object held by other objects is trac
 ### Tracing / Mark and Sweep GC
 Tracing, or mark and sweep garbage collection is a technique first implemented by McCarthy for the Lisp programming language in 1959. Tracing GC allows a process to free all unreferenced objects by pausing the process and performing a garbage collection. When the process dynamically allocates an object, if the remaining space on the heap is smaller than size of the object, a mark and sweep phase is triggered.
 The garbage collector begins by tracing the reference graph, beginning with the set of references held in the stack, the "root set", and marking any visited object as "in use". After completing the tracing and marking, the garbage collector then traverses the entirety of the heap, reclaiming the memory space of any object that is not marked. For objects which were marked "in use", the "in use" flag is then cleared, preparing for the next cycle.
+```
+void trace(Reference ref) {
+    if (object.notMarked()) {
+        object.mark();
+        List<Reference> g = object.getRefs();
+        for (Reference r : g) trace(r);
+    }
+}
+```
+A recursive strategy for tracing phase.
+```
+void rootSet(Stack stk) {
+    for (Reference r : stk) trace(r);
+}
+```
 Tracing GC does not incur the overhead of keeping track of reference counts for each object in existence, and avoids the bugs possible from circular references. However, the mark and sweep phase causes a pause in the execution of the program, that is linear in proportion to the size of the heap.
 A number of strategies exist to manage the duration of pause times. Our simulation considers one specific strategy called Generational Tracing GC.
 
