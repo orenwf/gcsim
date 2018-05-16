@@ -19,8 +19,8 @@ In order to maintain a representation of the its state, a process will instruct 
 ### An Object
 An arbitrary aggregation of contiguous and non-contiguous memory whose value represents information relevant to the executing program. An example would be an integer, a string, or a reference to an other object. More complex objects can exist and contain other types of objects or contain references to other objects.
 ```
-class Object_T 
-{
+class Object_T {
+
     List<Reference> references;
     Long size;
     boolean marked;
@@ -31,6 +31,14 @@ class Object_T
 
 ### A Reference
 An object whose value is the address in logical memory of an other object. A reference may also carry with it other types of information, such as 'metadata'. A directed graph of references pointing to objects (sometimes containing other references) is typically referred to as a reference graph or tree.
+```
+class Reference {
+	
+	private Object_T address;
+    ...
+}
+
+```
 
 ### The 'Stack'
 The stack is an ordered array of objects of fixed size, with newer objects at the top. In aggregate, the stack represents the entirety of the state of the currently executing program, in that it contains all of the roots of all reference graphs, which emanate from it. In a memory-managed programming language such as Java, the stack only holds references to other objects, which are allocated on the heap. Typically the stack is segmented into partitions called stack-frames which segregate access from one part of the stack to an other, but we will simulate this abstractly, not explicitly.
