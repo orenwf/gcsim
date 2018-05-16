@@ -164,26 +164,20 @@ We tested five models of diffenrent heap sizes and ran 100 simulations on each w
 
 1) Arrival of object --> poisson process 
 
-2)Lifetime of object --> uniform 
+2) Lifetime of object --> uniform 
 
-3)Size of object --> uniform 
+3) Size of object --> uniform 
 
-**The expected values for the 5 sampling distribution and conffidence intervals**
+**The expected values for the 5 sampling distribution, conffidence intervals and some other statistics**
 
 
-**[4.0, 16.0, 80.0**
+**[4.0, 16.0, 80.0]**
 
 Expected total pause time: 133133.43
 
 Expected variance of pause times: 2555.1638272832793
 
 We are 95% confidence that the value lies between :[133123, 133143]
-
-Generation 0: 4.0
-
-Generation 1: 16.0
-
-Generation 2: 80.0
 
 Variance total pause time: 10432.078729816985
 
@@ -196,16 +190,10 @@ Expected variance of pause times: 2347.1853611160595
 
 We are 95% confidence that the value lies between : [133438, 133455]
 
-Generation 0: 5.0
-
-Generation 1: 25.0
-
-Generation 2: 70.0
-
 Variance total pause time: 15868.024475311979
 
 
-**[6.0, 36.0, 58.0**
+**[6.0, 36.0, 58.0]**
 
 Expected total pause time: 119636.82
 
@@ -213,16 +201,10 @@ Expected variance of pause times: 1607.3163441431666
 
 We are 95% confidence that the value lies between : [119629, 119645]
 
-Generation 0: 6.0
-
-Generation 1: 36.0
-
-Generation 2: 58.0
-
 Variance total pause time: 8111.29159798857
 
 
-**[33.0, 33.0, 34.0**
+**[33.0, 33.0, 34.0]**
 
 Expected total pause time: 53806.19
 
@@ -230,32 +212,18 @@ Expected variance of pause times: 1779.5470772703225
 
 We are 95% confidence that the value lies between: [53798, 53815]
 
-Generation 0: 33.0
-
-Generation 1: 33.0
-
-Generation 2: 34.0
-
 Variance total pause time: 5437.480684462245
 
 
-**[50.0, 30.0, 20.0**
+**[50.0, 30.0, 20.0]**
 
 Expected total pause time: 47312.18
 
 Expected variance of pause times: 2009.6598962015173
 
-We are 95% confidence that the value lies between: 47303, 47321]
-
-Generation 0: 50.0
-
-Generation 1: 30.0
-
-Generation 2: 20.0
+We are 95% confidence that the value lies between: [47303, 47321]
 
 Variance total pause time: 4648.216254392646
-
-![reference-object-model]（https://pbs.twimg.com/media/DdV7fQcWsAEv1US.jpg）
 
 
 
