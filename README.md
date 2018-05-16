@@ -98,7 +98,7 @@ void trace(Reference ref) {
 ```
 A recursive strategy for tracing phase.
 ```
-void rootSet(Stack stk) {
+void traverseRootSet(Stack stk) {
     for (Reference r : stk) trace(r);
 }
 ```
