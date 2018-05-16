@@ -45,6 +45,7 @@ The stack is an ordered array of objects of fixed size, with newer objects at th
 
 ### The 'Heap'
 ![the Heap](https://i.imgur.com/8Cu7GWS.jpg)
+
 Because you can't just put everything in the stack, the heap is an unordered collection of objects of varying sizes. When a process executes, the machine running it allocates some fixed amount of virtual memory to it. After space for the code memory, static allocations and stack are taken into account, the balance of the space (usually the bulk of it) is devoted to the heap. Objects which are not statically allocated by code, whose size are not known prior to execution, and which must be stored for longer duration than the currently executing stack frame are allocated during execution are stored on the heap.
 
 ### Allocation
