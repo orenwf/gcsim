@@ -11,9 +11,6 @@
 ## Simulating tracing garbage collection in a Virtual Machine.
 This program simulates a high level implementation of a mark-and-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to answer questions about **how the duration and variance of pause times during garbage collection depend on the design of the garbage collection algorithm**, given some assumptions made about the distributions of frequency of object allocation in heap memory, object sizes, and object lifetimes. This simulation will produce results which could indicate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
 
-[This research project is part of the work being done in the completion of Prof. Felisa J. Vázquez-Abad's **Introduction to Stochastic Processes and Computer Simulation** course at the *City University of New York: Hunter College*, in Spring, 2018.](http://www.cs.hunter.cuny.edu/~felisav/StochasticProcesses/Course_Description.html)
-
-
 ## An overview of a computer's memory model
 Computers based on the Von Neumann model are designed with persistent random access memory laid out in addressable associative arrays, or tables. While this can be abstracted away from direct connection with physical locations, the logical model of memory is organized thusly. When a process is executed by the operating system or virtual machine running on computer hardware, it reserves some portion of the machine's available resources for the process. The memory space of an executing process is typically divided into *code memory* where the static pre-compiled instruction set for the process is kept on hand, and *dynamic memory* which is used by the executing process to save results of computation.
 
@@ -142,16 +139,85 @@ Objects are not initially allocated to this generation. Objects reaching this ge
 The oldest objects which have survived at least two garbage collections will become members of the permanent or mature generation. Objects that are allocated based on static library imports and language level allocations will also typically be contained here, since they are likely to be needed throughout the process, and their memory will not be available for freeing. Since this generation is the final one, and there are no futher migrations possible, this generation performs **compaction** along with garbage collection.
 
 ### How our VM simulates GC
-- Our virtual machine has a fixed total heap size of `134,217,728 words`, with `8-byte` word size = `1 gigabyte` of memory
 - Parameters:
   - The number of objects to be simulated, `o`.
   - The generation size configuration, `x`, `y`, `z`.
 - Our simulation generates `o` triples of: 
-  - `long` unique `arrival` time `[10 ms - 1000 ms]` after the current time
-  - `long size` of the object `[100,000 words - 1,000,000 words]` and max `log(size)` references to other stack referenced objects, if any exist.
-  - `long lifetime` of the object's stack reference `[500 ms - 10,000 ms]` after `arrival`
+  - `long` arrival time
+  - `long` lifetime of the object's stack reference
+  - `long` size of the object and maximum number of references to other objects in the stack, if any exist.
+
+The reachable objects are those which, starting from those on the stack, can be traced by following references. All unreachable objects are deemed garbage and are collected by the GC upon it's next invocation. Once an object is popped from the VM's stack it is unreachable and becomes garbage.
+
+The parameters of the VM that can be configured are:
+- The threshold for GC invocation - The minimum number of objects needed to trigger a GC.
+- The heap size - The number of blocks available to the VM for allocation initially.
+These parameters can be configured via the VM's constructor VM(threshold, heapSize). The VM supports interfaces to push and pop objects from the stack.
 
 ## The probability model and mathematical justification
+
+What are we simulating?
+
+We tested five models of diffenrent queue sizes and ran 100 simulations on each with 500 objects and calculated the expected total pause time for each. To reduce the variance of the expected total pause time we used control random variables across the sampling distributions,
+
+We modeled 3 control random variables.
+
+1) Arrival of object --> poisson process 
+2)Lifetime of object --> uniform 
+3)Size of object --> uniform 
+
+The expected values for the 5 sampling distribution and conffidence intervals. 
+
+[4.0, 16.0, 80.0]
+Expected total pause time: 133133.43
+Expected variance of pause times: 2555.1638272832793
+Conffidence intervals: [133123, 133143]
+Generation 0: 4.0
+Generation 1: 16.0
+Generation 2: 80.0
+Variance total pause time: 10432.078729816985
+
+
+[5.0, 25.0, 70.0]
+Expected total pause time: 133446.47
+Expected variance of pause times: 2347.1853611160595
+Conffidence intervals: [133438, 133455]
+Generation 0: 5.0
+Generation 1: 25.0
+Generation 2: 70.0
+Variance total pause time: 15868.024475311979
+
+
+[6.0, 36.0, 58.0]
+Expected total pause time: 119636.82
+Expected variance of pause times: 1607.3163441431666
+Conffidence intervals: [119629, 119645]
+Generation 0: 6.0
+Generation 1: 36.0
+Generation 2: 58.0
+Variance total pause time: 8111.29159798857
+
+
+[33.0, 33.0, 34.0]
+Expected total pause time: 53806.19
+Expected variance of pause times: 1779.5470772703225
+Conffidence intervals: [53798, 53815]
+Generation 0: 33.0
+Generation 1: 33.0
+Generation 2: 34.0
+Variance total pause time: 5437.480684462245
+
+
+[50.0, 30.0, 20.0]
+Expected total pause time: 47312.18
+Expected variance of pause times: 2009.6598962015173
+Conffidence intervals: 47303, 47321]
+Generation 0: 50.0
+Generation 1: 30.0
+Generation 2: 20.0
+Variance total pause time: 4648.216254392646
+
+
 
 ## How to install and run GCSim:
 1. Have a computer with Java JDK version 1.8 or higher - download from: http://openjdk.java.net/install/
