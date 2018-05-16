@@ -1,7 +1,8 @@
 # GCSim
 
 1. [What is this?](https://github.com/orenwf/gcsim/blob/master/README.md#a-simulation-of-a-virtual-machine-using-generational-tracing-garbage-collection)
-2. [What is garbage collection?](https://github.com/orenwf/gcsim/blob/master/README.md#a-high-level-overview-of-gc)
+2. [An overview of computer memory model](https://github.com/orenwf/gcsim/blob/master/README.md#an-overview-of-a-computers-memory-model)
+2. [What is garbage collection?](https://github.com/orenwf/gcsim/blob/master/README.md#an-overview-of-garbage-collection)
 3. [How GCSim works.](https://github.com/orenwf/gcsim/blob/master/README.md#how-our-vm-simulates-gc)
 4. [The probability model in GCSim.](https://github.com/orenwf/gcsim/blob/master/README.md#the-probability-model-and-mathematical-justification)
 5. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
