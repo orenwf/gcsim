@@ -7,9 +7,9 @@
 5. [How do I use GCSim?](https://github.com/orenwf/gcsim/blob/master/README.md#how-to-install-and-run-gcsim)
 
 ## Simulating a virtual machine using generational tracing garbage collection.
-A high level implementation of a mark-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to answer questions about how the duration and variance of pause times during garbage collection in an executing process depend on the design of the garbage collection algorithm, given some assumptions made about the distributions of frequency of object allocation in heap memory, object sizes, and object lifetimes. This simulation will produce results which could indicate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
+This program simulates a high level implementation of a mark-and-sweep garbage collector (GC) performing automatic memory management for a virtual machine. The GC is implemented as a generational mark-and-sweep system, with three generations in total. The goal of the simulation is to answer questions about how the duration and variance of pause times during garbage collection in an executing process depend on the design of the garbage collection algorithm, given some assumptions made about the distributions of frequency of object allocation in heap memory, object sizes, and object lifetimes. This simulation will produce results which could indicate the optimal choices for relative generation size when measuring performance in terms of total GC pause times and variance in GC pause times for a single executable task involving dynamic memory allocations.
 
-## A high level overview of GC
+## An overview of GC
 Broadly, garbage collection (GC) is a form of automatic memory management. Garbage collection is performed by a procedure which attempts to reclaim memory occupied by objects that were once dynamically allocated (during program execution, rather than prior) from a finite pool of memory (the heap) reserved by the operating system for the executing program, but are no longer in use by the program. 
 
 ### An Object
@@ -19,11 +19,13 @@ An arbitrary aggregations of contiguous and non-contiguous memory address space 
 An object whose value is the address in logical memory of an other object. A reference may also carry with it other types of data, such as 'metadata'. A directed graph of references is typically referred to as a reference graph or tree.
 
 ### The 'Stack'
-In a memory-managed programming language such as Java, the stack only holds references to other objects. It represents the entire collection of references which are held by the currently executing program, wherein the stack contains all of the root references of all reference graphs.
+The stack is an ordered array of objects of fixed size, with newer objects at the top. In aggregate, the stack represents the entirety of the state of the currently executing program, in that it contains all of the root references of all reference graphs, which emanate from the stack. In a memory-managed programming language such as Java, the stack only holds references to other objects, which are allocated on the heap. Typically the stack is segmented into partitions called stack-frames which segregate access from one part of the stack to an other, but we will simulate this abstractly, not explicitly.
 
 ### The 'Heap'
+The heap is an unordered collection of objects of varying sizes. When a process executes, the machine running it allocates some fixed amount of virtual memory to it. After space for the code memory, static allocations and stack are taken into account, the balance of the space (usually the bulk of it) is devoted to the heap. Objects which are not statically allocated by code, whose size are not known prior to execution, and which must be stored for longer duration than the currently executing stack frame are allocated during execution are stored on the heap.
 
-### Allocaction
+### Allocation
+When the executing process needs to create an object that may or may not be just a reference, it asks the machine running it to reserve some amount of memory on the heap and then store and maintains information about the state of the heap after the event. When a new object is allocated on the heap, a reference may be placed on the stack which points to it.
 
 ## Garbage Collection Paradigms
 
