@@ -139,7 +139,7 @@ Objects are not initially allocated to this generation. Objects reaching this ge
 The oldest objects which have survived at least two garbage collections will become members of the permanent or mature generation. Objects that are allocated based on static library imports and language level allocations will also typically be contained here, since they are likely to be needed throughout the process, and their memory will not be available for freeing. Since this generation is the final one, and there are no futher migrations possible, this generation performs **compaction** along with garbage collection.
 
 ### How our VM simulates GC
-- Our virtual machine has a fixed total heap size of 134,217,728 words, with 8-byte words = 1 gigabyte of memory
+- Our virtual machine has a fixed total heap size of `134,217,728 words`, with `8-byte` word size = `1 gigabyte` of memory
 - Parameters:
   - The number of objects to be simulated, `o`.
   - The generation size configuration, `x`, `y`, `z`.
