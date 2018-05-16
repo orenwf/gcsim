@@ -160,6 +160,7 @@ These parameters can be configured via the VM's constructor VM(threshold, heapSi
 
 We tested five models of diffenrent heap sizes and ran 100 simulations on each with 500 objects and calculated the expected total pause time for each. To reduce the variance of the expected total pause time we used control random variables across the sampling distributions,
 
+### Variance Reduction Technique
 **We modeled 3 control random variables.**
 
 1) Arrival of object --> poisson process 
