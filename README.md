@@ -168,9 +168,10 @@ We tested five models of diffenrent heap sizes and ran 100 simulations on each w
 
 3)Size of object --> uniform 
 
-**The expected values for the 5 sampling distribution and conffidence intervals. **
+**The expected values for the 5 sampling distribution and conffidence intervals.
 
-[4.0, 16.0, 80.0]
+
+**[4.0, 16.0, 80.0]
 
 Expected total pause time: 133133.43
 
@@ -187,7 +188,7 @@ Generation 2: 80.0
 Variance total pause time: 10432.078729816985
 
 
-[5.0, 25.0, 70.0]
+**[5.0, 25.0, 70.0]
 
 Expected total pause time: 133446.47
 
@@ -204,7 +205,7 @@ Generation 2: 70.0
 Variance total pause time: 15868.024475311979
 
 
-[6.0, 36.0, 58.0]
+**[6.0, 36.0, 58.0]
 
 Expected total pause time: 119636.82
 
@@ -221,7 +222,7 @@ Generation 2: 58.0
 Variance total pause time: 8111.29159798857
 
 
-[33.0, 33.0, 34.0]
+**[33.0, 33.0, 34.0]
 
 Expected total pause time: 53806.19
 
@@ -238,7 +239,7 @@ Generation 2: 34.0
 Variance total pause time: 5437.480684462245
 
 
-[50.0, 30.0, 20.0]
+**[50.0, 30.0, 20.0]
 
 Expected total pause time: 47312.18
 
