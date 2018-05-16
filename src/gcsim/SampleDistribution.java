@@ -81,15 +81,15 @@ public class SampleDistribution implements Callable<HashMap<String, Double>> {
 				.reduce(Double::sum).map(sum -> Math.sqrt(sum/sampleStats.size())).orElse(0d);
 		sampleDist.put("Variance total pause time", varPauseTotal);
 		
-//		Double meanPauseCount =  sampleStats.stream()	// mean of the total number of pauses for a sample distribution
-//				.map(stats -> stats.get("count"))
-//				.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
-//		sampleDist.put("Mean pause count", meanPauseCount);
-//					
-//		Double varPauseCount = sampleStats.stream()		// variance of the total number of pauses for a sample dist.
-//				.map(stats -> Math.pow(stats.get("count") - meanPauseCount, 2))
-//				.reduce(Double::sum).map(sum -> Math.sqrt(sum/sampleStats.size())).orElse(0d);
-//		sampleDist.put("Variance pause count", varPauseCount);
+		Double meanPauseCount =  sampleStats.stream()	// mean of the total number of pauses for a sample distribution
+				.map(stats -> stats.get("count"))
+				.reduce(Double::sum).map(sum -> sum/sampleStats.size()).orElse(0d);
+		sampleDist.put("Mean pause count", meanPauseCount);
+					
+		Double varPauseCount = sampleStats.stream()		// variance of the total number of pauses for a sample dist.
+				.map(stats -> Math.pow(stats.get("count") - meanPauseCount, 2))
+				.reduce(Double::sum).map(sum -> Math.sqrt(sum/sampleStats.size())).orElse(0d);
+		sampleDist.put("Variance pause count", varPauseCount);
 		
 		Double meanPauseVar = sampleStats.stream()		// mean of the variances of pause times for a sample dist.
 				.map(stats -> stats.get("variance"))
