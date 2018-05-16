@@ -139,20 +139,14 @@ Objects are not initially allocated to this generation. Objects reaching this ge
 The oldest objects which have survived at least two garbage collections will become members of the permanent or mature generation. Objects that are allocated based on static library imports and language level allocations will also typically be contained here, since they are likely to be needed throughout the process, and their memory will not be available for freeing. Since this generation is the final one, and there are no futher migrations possible, this generation performs **compaction** along with garbage collection.
 
 ### How our VM simulates GC
+- Our virtual machine has a fixed total heap size of 134,217,728 words, with 8-byte words = 1 gigabyte of memory
 - Parameters:
   - The number of objects to be simulated, `o`.
   - The generation size configuration, `x`, `y`, `z`.
 - Our simulation generates `o` triples of: 
-  - `long` arrival time
-  - `long` lifetime of the object's stack reference
-  - `long` size of the object and maximum number of references to other objects in the stack, if any exist.
-
-The reachable objects are those which, starting from those on the stack, can be traced by following references. All unreachable objects are deemed garbage and are collected by the GC upon it's next invocation. Once an object is popped from the VM's stack it is unreachable and becomes garbage.
-
-The parameters of the VM that can be configured are:
-- The threshold for GC invocation - The minimum number of objects needed to trigger a GC.
-- The heap size - The number of blocks available to the VM for allocation initially.
-These parameters can be configured via the VM's constructor VM(threshold, heapSize). The VM supports interfaces to push and pop objects from the stack.
+  - `long` unique `arrival` time `[10 ms - 1000 ms]` after the current time
+  - `long size` of the object `[100,000 words - 1,000,000 words]` and max `log(size)` references to other stack referenced objects, if any exist.
+  - `long lifetime` of the object's stack reference `[500 ms - 10,000 ms]` after `arrival`
 
 ## The probability model and mathematical justification
 
