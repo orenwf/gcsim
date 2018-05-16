@@ -121,25 +121,25 @@ int pauseTime(func trace(heap), func sweep(heap)) {
 
 A number of strategies exist to manage the duration of pause times. These strategies essentially fall into two sets. One set tries to reduce the overall size of the heap space that is being garbage collected at any one time, by partitioning the heap space into smaller spaces and managing them separately. The other set use complex applications of concurrent programming in order to collect garbage during program execution, without any explicit pausing. Our simulation considers partitioning heaps into multiple parts, and collecting garbage only in sequential execution of the process. Specifically, we consider a strategy called Generational Tracing GC.
 
-### Generational Tracing GC
+### Generational Tracing GC and our Simulation
 
 ![HotspotMM](https://2.bp.blogspot.com/-ZEyygkTuw-c/WlL5A_riU4I/AAAAAAAAVKw/R06IHQ-X_r481ldKR2KBsd8hVBGMBntVQCLcBGAs/s1600/Java%2BHeap.png)
 
-Generational heap garbage collection involved partitioning the heap into some number of mutually exclusive areas where objects can be stored. Objects are maintained in one of these generations between garbage collection events, and during a garbage collection may be transitioned into an other generation, based on the **age of the object**, or the total number of garbage collection events during which the object has been present in the heap. These transitions can be modeled by a directional graph, since objects begin in the "young" generation, and migrate over the course of process execution until reaching the "mature" generation.
+Generational heap garbage collection involves partitioning the heap into some number of mutually exclusive areas where objects can be stored. Objects are maintained in one of these generations between garbage collection events, and during a garbage collection may be transitioned into an other generation, based on the **age of the object**, or the total number of garbage collection events during which the object has been present in the heap. These transitions can be modeled by a directional graph, since objects begin in the "young" generation, and migrate over the course of process execution until reaching the "mature" generation.
 
 Partitioning the heap allows for differentiation between garbage collection events. Rather than all garbage collections operating on the entire heap space (**major garbage collection**), a garbage collection event may only operate on some smaller fraction of the total heap, depending on how many generations are involved.
 
 #### Young Generation
-Objects are all initally allocated onto this space. Upon reaching an age that meets the requirement, the objects here will be copied to the Tenured generation. In the Java Virtual Machine, specifically, this generation is futher partitioned into smaller spaces for greater efficiency. Things like temporary variables, loop variables, and other short lived objects typically are allocated here and are collected before they migrate to the next generation.
+Objects are all initally allocated onto this space. Upon reaching an age that meets the requirement, the objects here will be copied to the Tenured generation during the next garbage collection. In the Java Virtual Machine, specifically, this generation is futher partitioned into smaller spaces for greater efficiency, but we do not simulate this here. Things like temporary variables, loop variables, and other short lived objects typically are allocated here and are collected before they migrate to the next generation. When this generation triggers a garbage collection due to being full, this is known as a **minor garbage collection**.
 
 #### Tenured Generation
-Objects reaching this generation have survievd at least one garbage collection, and are expected to survive for a longer duration.
+Objects are not initially allocated to this generation. Objects reaching this generation have survived at least one garbage collection, and are expected to survive for a longer duration. If a garbage collection is triggered in the Tenured Generation, it will be directly subsequent to a garbage collection in the Young Generation. A garbage collection of this generation qualifies as a **major GC**. Objects that reach the minimum age required in the Tenured Generation are promoted to the next generation during a garbage collection.
 
 #### Permanent or Mature Generation
-The oldest objects which have survived at least two garbage collections will become members of the permanent or mature generation. Objects that are allocated based on static library imports and language level allocations will also typically be contained here, since they are likely to be needed throughout the process, and their memory will not be available for freeing.
+The oldest objects which have survived at least two garbage collections will become members of the permanent or mature generation. Objects that are allocated based on static library imports and language level allocations will also typically be contained here, since they are likely to be needed throughout the process, and their memory will not be available for freeing. Since this generation is the final one, and there are no futher migrations possible, this generation performs **compaction** along with garbage collection.
 
-## How our VM simulates GC
-A model of a stack based VM is created where the stack holds references to all objects ever allocated. A freeList of memory is maintained from which all allocations are made.
+### How our VM simulates GC
+An abstract model of a stack based VM is created where the a pool of references to all objects ever allocated. The stack in this simulation is abstracted away, and instead of a 
 
 The reachable objects are those which, starting from those on the stack, can be traced by following references. All unreachable objects are deemed garbage and are collected by the GC upon it's next invocation. Once an object is popped from the VM's stack it is unreachable and becomes garbage.
 
